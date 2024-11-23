@@ -27,6 +27,7 @@ public class MerchantServiceImpl implements MerchantsService {
 
 	@Autowired
 	private MerchantsRepository merchantsRepository;
+	
 	@Autowired
 	private MerchantInfoRepository merchantInfoRepository;
 

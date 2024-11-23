@@ -11,5 +11,7 @@ import com.Master_Dashboard.entity.MerchantInfo;
 public interface MerchantInfoRepository extends JpaRepository<MerchantInfo, Long> {
 
 	Optional<MerchantInfo> findByClientSecret(String encString);
+
+	Optional<MerchantInfo> findByClientIdAndClientSecret(String encString, String encString2);
 	
 }

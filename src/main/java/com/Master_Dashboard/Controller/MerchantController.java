@@ -4,9 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.validation.Valid;
 
-import org.slf4j.LoggerFactory;
+//import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +21,7 @@ import com.Master_Dashboard.service.MerchantsService;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class MerchantController {
 
-	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MerchantController.class);
+//	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MerchantController.class);
 
 	@Autowired
 	private MerchantsService merchantsService;
@@ -33,7 +32,7 @@ public class MerchantController {
 	}
 
 	@PostMapping("/login")
-	public Map<String, Object> loginMerchant(@RequestBody @Valid LoginRequest loginRequest) {
+	public Map<String, Object> loginMerchant( @Valid @RequestBody LoginRequest loginRequest) {
 
 		Map<String, Object> map = new HashMap<String, Object>();
 

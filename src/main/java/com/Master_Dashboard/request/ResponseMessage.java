@@ -48,7 +48,7 @@ public class ResponseMessage {
 	public static final   String API_STATUS_FAILED = "Failed";
 	public static final   String API_STATUS_REFUND = "REFUND";
 
-	public static final   String UNAUTHORISED_DESCRIPTION = "Unauthorized Access to FidyPay Platform";
+	public static final   String UNAUTHORISED_DESCRIPTION = "Unauthorized Access to the Platform.";
 	public static final   String DEBIT_AMOUNT_NOT_AVAILABLE = "Debit Amount not available";
 	public static final   String MERCHANTTRXNREFID_ALREADY_EXIST = "merchantTrxnRefId already exist please try unique id";
 	public static final   String MERCHANT_ALREADY_EXIST = "Merchant is alreay exist.";
@@ -68,7 +68,7 @@ public class ResponseMessage {
 	public static final   String TRANSACTION_REFUNDED = "Transaction Refund Successfully";
 	public   static final String MERCHANTTRXNREFID_NOT_EXIST = "merchantTrxnRefId not exist";
 	public static final   String TRANSACTION_NOT_FOUND = "Transaction Not Found";
-	public static final   String SERVICEID_NOT_EXIST = "To subscribe for this service, get in touch with the FidyPay team.";
+	public static final   String SERVICEID_NOT_EXIST = "To subscribe for this service, get in touch with the support team.";
 	public static final   String INVALID_JSON_FORMATE = "Invalid Request";
 	public static final   String HEADERS_MISSING = "Missing Required Headers";
 	public static final   String HEADERS_PARAM = "Missing Required Query Params";
@@ -77,5 +77,6 @@ public class ResponseMessage {
 	public   static final String INVALID_EMAIL_OR_PASSWORD = "Invalid user email or password";
 
 	public   static final String PAYMENT_CANNOT = "Payment cannot be accepted at this time. Please try again later.";
+	public static final String MERCHANT_TRXN_ID_ = "merchantTrxnRefId";
 
 }
