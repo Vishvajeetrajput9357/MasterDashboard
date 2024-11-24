@@ -16,6 +16,7 @@ import com.Master_Dashboard.repository.MerchantsRepository;
 import com.Master_Dashboard.repository.VerificationRepository;
 import com.Master_Dashboard.request.ResponseMessage;
 import com.Master_Dashboard.service.MerchantEkycService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class MerchantEkycServiceImpl implements MerchantEkycService {
@@ -29,6 +30,7 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 	private final RestTemplate restTemplate;
 	private final String GENERATE_OTP_URL = "https://developer.fidypay.com/ekyc/aadhar/generateOtp/";
 	private final String VALIDATE_OTP_URL = "https://developer.fidypay.com/ekyc/aadhar/validateOtp";
+	private final String PAN_URL = "https://developer.fidypay.com/ekyc/pan/fetchPanV2/";
 
 	public MerchantEkycServiceImpl(RestTemplate restTemplate, MerchantsRepository merchantsRepository,
 			VerificationRepository verificationRepository) {
@@ -96,7 +98,7 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 	}
 
 	@Override
-	public Map<String, Object> validateOtp(String otp, String merchantTxnRefId, long merchantId) {
+	public synchronized Map<String, Object> validateOtp(String otp, String merchantTxnRefId, long merchantId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			Map<String, String> requestBody = new HashMap<>();
@@ -176,6 +178,75 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 		return map;
 	}
 
+	@Override
+	public Map<String, Object> panVerify(String pan,long merchantId) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			getDefaultHeaders(headers);
+			LOGGER.info("responseBody from headers : {}", headers);
+
+			HttpEntity<String> entity = new HttpEntity<>(headers);
+			ResponseEntity<Map> response = restTemplate.exchange(PAN_URL + "" + pan, HttpMethod.POST, entity,
+					Map.class);
+			Map<String, Object> responseBody = response.getBody();
+
+			if (responseBody != null) {
+				String status = (String) responseBody.get("status");
+				String code = (String) responseBody.get("code");
+
+				if ("0x0200".equals(code) && "Success".equalsIgnoreCase(status)) {
+
+					String description = (String) responseBody.get("description");
+
+					if ("Data fetch successfully.".equalsIgnoreCase(description)) {
+						map.put(ResponseMessage.CODE, ResponseMessage.SUCCESS);
+						map.put(ResponseMessage.FIELD, ResponseMessage.API_STATUS_SUCCESS);
+						map.put(ResponseMessage.DESCRIPTION, "The Pan verification has been successful.");
+						
+						try {
+				            ObjectMapper objectMapper = new ObjectMapper();
+				            String jsonString = objectMapper.writeValueAsString(responseBody);
+
+							VerificationEntity verificationEntity = new VerificationEntity();
+							verificationEntity.setMerchantId(merchantId);
+							verificationEntity.setVerificationRequestDetails(Encryption.encString(jsonString));
+							verificationEntity.setVerificationType(Encryption.encString("PAN"));
+							verificationEntity.setIsEkycVerifide("Y");
+							verificationRepository.save(verificationEntity);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
+					} else {
+						map.put(ResponseMessage.CODE, ResponseMessage.FAILED);
+						map.put(ResponseMessage.FIELD, ResponseMessage.API_STATUS_FAILED);
+						map.put(ResponseMessage.DESCRIPTION, "Please try after Some time.");
+					}
+
+				} else if ("0x0202".equals(code) || "0x0205".equals(code) || "Failed".equalsIgnoreCase(status)) {
+					String description = (String) responseBody.get("description");
+
+					LOGGER.info("responseBody from Fidypay : {}", responseBody);
+					setErrorResponse(map, ResponseMessage.FAILED, description);
+
+				} else {
+					LOGGER.info("responseBody from Fidypay : {}", responseBody);
+
+					setApiStatusFailed(map);
+				}
+			} else {
+				LOGGER.info("responseBody from Fidypay : {}", responseBody);
+				setApiStatusSomethingWent(map);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			setApiStatusSomethingWent(map);
+		}
+		return map;
+	}
+
 	public void getDefaultHeaders(HttpHeaders headers) {
 
 		headers.set("accept", "*/*");
@@ -204,4 +275,5 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 		response.put(ResponseMessage.STATUS, ResponseMessage.API_STATUS_FAILED);
 		return response;
 	}
+
 }

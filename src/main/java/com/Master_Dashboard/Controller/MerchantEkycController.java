@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.Master_Dashboard.Encryption.Encryption;
 import com.Master_Dashboard.entity.MerchantInfo;
 import com.Master_Dashboard.repository.MerchantInfoRepository;
+import com.Master_Dashboard.repository.VerificationRepository;
 import com.Master_Dashboard.request.ResponseMessage;
 import com.Master_Dashboard.service.MerchantEkycService;
 
@@ -34,6 +35,10 @@ public class MerchantEkycController {
 	@Autowired
 	private MerchantInfoRepository merchantInfoRepository;
 
+	@Autowired
+	private VerificationRepository verificationRepository;
+	
+	
 	@PostMapping("/aadhar/{aadhaar}")
     public Map<String, Object> merchantAadhaarGenerateOtp(
             @RequestHeader("Client-Id") String clientId,
@@ -43,14 +48,17 @@ public class MerchantEkycController {
         Map<String, Object> response = new HashMap<>();
 
         try {
+        	Optional<MerchantInfo> merchantInfoOpt = validateMerchant(clientId, clientSecret);
+        	if (!merchantInfoOpt.isPresent()) {
+        		return setUnauthorised(response);
+        	}
+        	 if (checkMerchantKycAlredyExist(merchantInfoOpt.get().getMerchantId(),"AADHAAR")) {
+ 				return setErrorResponse(response, ResponseMessage.FAILED,"Addhaar is already verifide");
+ 			}
             if (!isValidAadhaar(aadhaar)) {
                 return setErrorResponse(response, ResponseMessage.FAILED, "Invalid Aadhaar Number.");
             }
 
-            Optional<MerchantInfo> merchantInfoOpt = validateMerchant(clientId, clientSecret);
-            if (!merchantInfoOpt.isPresent() || !isMerchantActive(merchantInfoOpt.get())) {
-                return setUnauthorised(response);
-            }
             response = merchantEkycService.merchantAadhaarGenrateOtp(aadhaar);
 
         } catch (Exception e) {
@@ -71,10 +79,43 @@ public class MerchantEkycController {
 
         try {
             Optional<MerchantInfo> merchantInfoOpt = validateMerchant(clientId, clientSecret);
-            if (!merchantInfoOpt.isPresent() || !isMerchantActive(merchantInfoOpt.get())) {
+            if (!merchantInfoOpt.isPresent()) {
                 return setUnauthorised(response);
             }
+            if (checkMerchantKycAlredyExist(merchantInfoOpt.get().getMerchantId(),"AADHAAR")) {
+				return setErrorResponse(response, ResponseMessage.FAILED,"Addhaar is already verifide");
+			}
             response = merchantEkycService.validateOtp(validateOtp.getOtp(),validateOtp.getMermerchantTrxnRefId(),merchantInfoOpt.get().getMerchantId());
+
+        } catch (Exception e) {
+            LOGGER.error("Error occurred while generating Aadhaar OTP", e);
+            return setUnauthorised(response);
+        }
+
+        return response;
+    }
+	
+	@PostMapping("/panVerify/{pan}")
+    public Map<String, Object> merchantPanVerify(
+            @RequestHeader("Client-Id") String clientId,
+            @RequestHeader("Client-Secret") String clientSecret,
+            @PathVariable("pan") String pan) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+        	Optional<MerchantInfo> merchantInfoOpt = validateMerchant(clientId, clientSecret);
+        	if (!merchantInfoOpt.isPresent()) {
+        		return setUnauthorised(response);
+        	}
+        	 if (checkMerchantKycAlredyExist(merchantInfoOpt.get().getMerchantId(),"PAN")) {
+ 				return setErrorResponse(response, ResponseMessage.FAILED,"pan is already verifide");
+ 			}
+            if (!isValidPan(pan)) {
+                return setErrorResponse(response, ResponseMessage.FAILED, "Invalid pan Number.");
+            }
+
+            response = merchantEkycService.panVerify(pan,merchantInfoOpt.get().getMerchantId());
 
         } catch (Exception e) {
             LOGGER.error("Error occurred while generating Aadhaar OTP", e);
@@ -91,9 +132,9 @@ public class MerchantEkycController {
 		return map;
 	}
 	 
-	private boolean isMerchantActive(MerchantInfo merchantInfo) {
+	public boolean isMerchantActive(MerchantInfo merchantInfo) {
 	        return "Y".equalsIgnoreCase(merchantInfo.getIsMerchantActive());
-	    }
+	}
 	
 	private Optional<MerchantInfo> validateMerchant(String clientId, String clientSecret) {
         try {
@@ -107,6 +148,16 @@ public class MerchantEkycController {
         }
     }
 	
+	private boolean checkMerchantKycAlredyExist(long merchantId,String tyep) {
+        try {
+
+            return verificationRepository.existsByMerchantIdAndVerificationType(merchantId,tyep);
+        } catch (Exception e) {
+            LOGGER.error("Error occurred during merchant validation", e);
+            return false;
+        }
+    }
+	
 	private boolean isValidAadhaar(String aadhaar) {
         return aadhaar != null && aadhaar.matches("\\d{12}");
     }
@@ -117,4 +168,9 @@ public class MerchantEkycController {
         response.put(ResponseMessage.STATUS, ResponseMessage.API_STATUS_FAILED);
         return response;
     }
+
+	private boolean isValidPan(String pan) {
+	    return pan != null && pan.matches("[A-Z]{5}\\d{4}[A-Z]");
+	}
+	
 }
