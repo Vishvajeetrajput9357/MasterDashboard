@@ -52,7 +52,7 @@ public class MerchantEkycController {
         	if (!merchantInfoOpt.isPresent()) {
         		return setUnauthorised(response);
         	}
-        	 if (checkMerchantKycAlredyExist(merchantInfoOpt.get().getMerchantId(),"AADHAAR")) {
+        	 if (checkMerchantKycAlredyExist(merchantInfoOpt.get().getMerchantId(),Encryption.encString("AADHAAR"))) {
  				return setErrorResponse(response, ResponseMessage.FAILED,"Addhaar is already verifide");
  			}
             if (!isValidAadhaar(aadhaar)) {
@@ -82,7 +82,7 @@ public class MerchantEkycController {
             if (!merchantInfoOpt.isPresent()) {
                 return setUnauthorised(response);
             }
-            if (checkMerchantKycAlredyExist(merchantInfoOpt.get().getMerchantId(),"AADHAAR")) {
+            if (checkMerchantKycAlredyExist(merchantInfoOpt.get().getMerchantId(),Encryption.encString("AADHAAR"))) {
 				return setErrorResponse(response, ResponseMessage.FAILED,"Addhaar is already verifide");
 			}
             response = merchantEkycService.validateOtp(validateOtp.getOtp(),validateOtp.getMermerchantTrxnRefId(),merchantInfoOpt.get().getMerchantId());
@@ -108,7 +108,7 @@ public class MerchantEkycController {
         	if (!merchantInfoOpt.isPresent()) {
         		return setUnauthorised(response);
         	}
-        	 if (checkMerchantKycAlredyExist(merchantInfoOpt.get().getMerchantId(),"PAN")) {
+        	 if (checkMerchantKycAlredyExist(merchantInfoOpt.get().getMerchantId(),Encryption.encString("PAN"))) {
  				return setErrorResponse(response, ResponseMessage.FAILED,"pan is already verifide");
  			}
             if (!isValidPan(pan)) {

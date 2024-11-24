@@ -16,6 +16,7 @@ import com.Master_Dashboard.entity.MerchantInfo;
 import com.Master_Dashboard.entity.Merchants;
 import com.Master_Dashboard.repository.MerchantInfoRepository;
 import com.Master_Dashboard.repository.MerchantsRepository;
+import com.Master_Dashboard.repository.VerificationRepository;
 import com.Master_Dashboard.request.LoginRequest;
 import com.Master_Dashboard.request.MerchantRagisterRequest;
 import com.Master_Dashboard.request.ResponseMessage;
@@ -34,6 +35,9 @@ public class MerchantServiceImpl implements MerchantsService {
 	@Autowired
 	private MerchantsInfoService merchantsInfoService;
 
+	@Autowired
+	private VerificationRepository verificationRepository;
+	
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MerchantServiceImpl.class);
 
 	@Override
@@ -150,6 +154,13 @@ public class MerchantServiceImpl implements MerchantsService {
 						map.put("client-id", Encryption.decString(MerchantInfo.getClientId()));
 						map.put("client-secret", Encryption.decString(MerchantInfo.getClientSecret()));
 						map.put("code", "0x0200");
+						
+						
+						map.put("pKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("PAN")));
+						map.put("AaKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("AADHAAR")));
+						map.put("BaKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("BANKACCOUNT")));
+						
+						
 						map.put("description", "Login Successfully");
 					}
 
