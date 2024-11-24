@@ -3,6 +3,7 @@ package com.Master_Dashboard.serviceImpl;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -110,7 +111,7 @@ public class MerchantServiceImpl implements MerchantsService {
 	@Override
 	public synchronized Map<String, Object> loginMerchant(@Valid LoginRequest loginRequest) {
 
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		try {
 			LOGGER.info("Merchant is loginRequest: {}",Encryption.encString(Encryption.encString(loginRequest.getEmail())));
 			LOGGER.info("Merchant is loginRequest: {}",Encryption.decString("4SfDr2K7R5kG7EVLFyoscQ=="));
