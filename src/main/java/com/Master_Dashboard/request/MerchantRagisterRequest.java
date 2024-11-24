@@ -28,7 +28,7 @@ public class MerchantRagisterRequest{
 		private String merchantLastname;
 		
 		@NotBlank(message = "BusinessName can not be blank.")
-		@Pattern(regexp = "^[a-zA-Z0-9., - ']{1,20}$", message = "Invalid BusinessName.")
+		@Pattern(regexp = "^[a-zA-Z0-9., - ']{1,200}$", message = "Invalid BusinessName.")
 		private String merchantBusinessName;
 
 		public String getMerchantEmail() {
