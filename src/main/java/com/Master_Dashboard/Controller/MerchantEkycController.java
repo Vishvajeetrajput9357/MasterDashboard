@@ -19,6 +19,7 @@ import com.Master_Dashboard.Encryption.Encryption;
 import com.Master_Dashboard.entity.MerchantInfo;
 import com.Master_Dashboard.repository.MerchantInfoRepository;
 import com.Master_Dashboard.repository.VerificationRepository;
+import com.Master_Dashboard.request.BankAccountVerificationReq;
 import com.Master_Dashboard.request.ResponseMessage;
 import com.Master_Dashboard.service.MerchantEkycService;
 
@@ -112,6 +113,32 @@ public class MerchantEkycController {
 			response = merchantEkycService.panVerify(pan, merchantInfoOpt.get().getMerchantId());
 
 		} catch (Exception e) {
+			LOGGER.error("Error occurred while generating Aadhaar OTP", e);
+			return setUnauthorised(response);
+		}
+
+		return response;
+	}
+
+	@PostMapping("/bankAccountVerification")
+	public Map<String, Object> merchantBankAccountVerification(@RequestHeader("Client-Id") String clientId,
+			@RequestHeader("Client-Secret") String clientSecret,
+			@Valid @RequestBody BankAccountVerificationReq merchantBankAccountVerification) {
+
+		Map<String, Object> response = new HashMap<>();
+		try {
+			Optional<MerchantInfo> merchantInfoOpt = validateMerchant(clientId, clientSecret);
+
+			if (!merchantInfoOpt.isPresent()) {
+
+				return setUnauthorised(response);
+			}
+
+			response = merchantEkycService.merchantBankAccountVerification(merchantBankAccountVerification,
+					merchantInfoOpt.get().getMerchantId());
+
+		} catch (Exception e) {
+			e.printStackTrace();
 			LOGGER.error("Error occurred while generating Aadhaar OTP", e);
 			return setUnauthorised(response);
 		}

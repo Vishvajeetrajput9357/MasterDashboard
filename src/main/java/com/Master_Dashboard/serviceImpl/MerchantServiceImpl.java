@@ -140,7 +140,11 @@ public class MerchantServiceImpl implements MerchantsService {
 							&& MerchantInfo.getIsMerchantActive().equalsIgnoreCase("Y"))) {
 						map.put(ResponseMessage.STATUS, ResponseMessage.API_STATUS_FAILED);
 						map.put(ResponseMessage.CODE, ResponseMessage.FAILED);
-						map.put(ResponseMessage.DESCRIPTION, "User is not active.");
+						map.put(ResponseMessage.DESCRIPTION, "User is not active.");	
+						map.put("pKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("PAN")));
+						map.put("AaKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("AADHAAR")));
+						map.put("BaKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("BANKACCOUNT")));
+						
 					} else {
 
 						SimpleDateFormat formateDate = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss");

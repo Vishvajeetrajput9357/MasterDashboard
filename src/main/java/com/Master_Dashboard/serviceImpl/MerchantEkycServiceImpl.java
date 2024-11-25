@@ -7,13 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 import com.Master_Dashboard.Controller.MerchantController;
 import com.Master_Dashboard.Encryption.Encryption;
 import com.Master_Dashboard.entity.Merchants;
 import com.Master_Dashboard.entity.VerificationEntity;
 import com.Master_Dashboard.repository.MerchantsRepository;
 import com.Master_Dashboard.repository.VerificationRepository;
+import com.Master_Dashboard.request.BankAccountVerificationReq;
 import com.Master_Dashboard.request.ResponseMessage;
 import com.Master_Dashboard.service.MerchantEkycService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,6 +34,7 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 	private final String GENERATE_OTP_URL = "https://developer.fidypay.com/ekyc/aadhar/generateOtp/";
 	private final String VALIDATE_OTP_URL = "https://developer.fidypay.com/ekyc/aadhar/validateOtp";
 	private final String PAN_URL = "https://developer.fidypay.com/ekyc/pan/fetchPanV2/";
+	private final String BANK_ACCOUNT_URL = "https://developer.fidypay.com/ekyc/accountVerification";
 
 	public MerchantEkycServiceImpl(RestTemplate restTemplate, MerchantsRepository merchantsRepository,
 			VerificationRepository verificationRepository) {
@@ -97,6 +101,7 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 		return map;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized Map<String, Object> validateOtp(String otp, String merchantTxnRefId, long merchantId) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -159,7 +164,7 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 
 					map.put(ResponseMessage.CODE, ResponseMessage.SUCCESS);
 					map.put(ResponseMessage.FIELD, ResponseMessage.API_STATUS_SUCCESS);
-					map.put(ResponseMessage.DESCRIPTION, "Aadhaar verification has been successfully completed.");
+					map.put(ResponseMessage.DESCRIPTION, description);
 					map.put(ResponseMessage.MERCHANT_TRXN_ID_, merchantTxnRefId);
 
 				} else {
@@ -214,6 +219,7 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 							verificationEntity.setVerificationType(Encryption.encString("PAN"));
 							verificationEntity.setIsEkycVerifide("Y");
 							verificationRepository.save(verificationEntity);
+							
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -276,4 +282,97 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 		return response;
 	}
 
+	
+	@Override
+	public Map<String, Object> merchantBankAccountVerification(
+			BankAccountVerificationReq merchantBankAccountVerification, long merchantId) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			Map<String, String> requestBody = new HashMap<>();
+			
+			requestBody.put("beneficiaryAccNo", merchantBankAccountVerification.getBankAccountNumber());
+			requestBody.put("beneficiaryIfscCode", merchantBankAccountVerification.getIfsc());
+			requestBody.put("merchantTrxnRefId", generateUniqueKey());
+			
+			HttpHeaders headers = new HttpHeaders();
+			getDefaultHeaders(headers);
+			HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
+			ResponseEntity<Map> response = restTemplate.exchange(BANK_ACCOUNT_URL, HttpMethod.POST, entity, Map.class);
+
+			Map<String, Object> responseBody = response.getBody();
+
+			if (responseBody != null) {
+				
+				LOGGER.info("responseBody from Fidypay : {}", responseBody);
+
+				String status = (String) responseBody.get("status");
+				String code = (String) responseBody.get("code");
+				String description = (String) responseBody.get("description");
+
+				if ("0x0200".equals(code) && "Success".equalsIgnoreCase(status)) {
+
+					if ("Data fetch successfully.".equalsIgnoreCase(description)) {
+						map.put(ResponseMessage.CODE, ResponseMessage.SUCCESS);
+						map.put(ResponseMessage.FIELD, ResponseMessage.API_STATUS_SUCCESS);
+						map.put(ResponseMessage.DESCRIPTION, "The Bank Account verification has been successful.");
+						
+						try {
+				            ObjectMapper objectMapper = new ObjectMapper();
+				            String jsonString = objectMapper.writeValueAsString(responseBody);
+
+							VerificationEntity verificationEntity = new VerificationEntity();
+							verificationEntity.setMerchantId(merchantId);
+							verificationEntity.setVerificationRequestDetails(Encryption.encString(jsonString));
+							verificationEntity.setVerificationType(Encryption.encString("BANKACCOUNT"));
+							verificationEntity.setIsEkycVerifide("Y");
+							verificationRepository.save(verificationEntity);
+							
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					} else {
+						map.put(ResponseMessage.CODE, ResponseMessage.FAILED);
+						map.put(ResponseMessage.FIELD, ResponseMessage.API_STATUS_FAILED);
+						map.put(ResponseMessage.DESCRIPTION, description);
+					}
+
+				} else if ("0x0202".equals(code) || "0x0205".equals(code) || "Failed".equalsIgnoreCase(status)) {
+
+					LOGGER.info("responseBody from Fidypay : {}", responseBody);
+					setErrorResponse(map, ResponseMessage.FAILED, description);
+
+				} else {
+					LOGGER.info("responseBody from Fidypay : {}", responseBody);
+
+					setApiStatusFailed(map);
+				}
+			} else {
+				LOGGER.info("responseBody from Fidypay : {}", responseBody);
+				setApiStatusSomethingWent(map);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			setApiStatusSomethingWent(map);
+		}
+		return map;
+		
+	}
+
+	 public static String generateUniqueKey() {
+	        // Get the current date and time
+	        LocalDateTime now = LocalDateTime.now();
+	        
+	        // Format the date and time to a compact form
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMddHHmmssSSS"); // 15 digits (yy: 2, MM: 2, dd: 2, HH: 2, mm: 2, ss: 2, SSS: 3)
+	        String formattedDateTime = now.format(formatter);
+	        
+	        // Generate a short random UUID
+	        String randomPart = UUID.randomUUID().toString().substring(0, 5); // 5 characters
+	        
+	        // Combine and limit to 20 characters
+	        return (formattedDateTime + randomPart).substring(0, 20);
+	    }
+	
+	
 }
