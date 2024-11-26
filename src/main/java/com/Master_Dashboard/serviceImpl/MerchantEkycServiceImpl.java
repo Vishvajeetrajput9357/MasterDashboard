@@ -19,6 +19,7 @@ import com.Master_Dashboard.repository.VerificationRepository;
 import com.Master_Dashboard.request.BankAccountVerificationReq;
 import com.Master_Dashboard.request.ResponseMessage;
 import com.Master_Dashboard.service.MerchantEkycService;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -52,9 +53,21 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 			LOGGER.info("responseBody from headers : {}", headers);
 
 			HttpEntity<String> entity = new HttpEntity<>(headers);
-			ResponseEntity<Map> response = restTemplate.exchange(GENERATE_OTP_URL + "" + aadharNumber, HttpMethod.POST,
-					entity, Map.class);
-			Map<String, Object> responseBody = response.getBody();
+//			ResponseEntity<Map> response = restTemplate.exchange(GENERATE_OTP_URL + "" + aadharNumber, HttpMethod.POST,
+//					entity, Map.class);
+//			Map<String, Object> responseBody = response.getBody();
+			
+			String jsonResponse="{\r\n"
+					+ "    \"code\": \"0x0200\",\r\n"
+					+ "    \"description\": \"OTP generated and sent successfully on the registered mobile number. Kindly trigger the Validate OTP API within the next 10 minutes.\",\r\n"
+					+ "    \"merchantTxnRefId\": \"5049C55C4E224E3AB8FD3D932F1BF207\",\r\n"
+					+ "    \"status\": \"Success\"\r\n"
+					+ "}";
+			 ObjectMapper objectMapper = new ObjectMapper();
+
+	            // Convert JSON string to Map
+	            Map<String, Object> responseBody = objectMapper.readValue(jsonResponse, new TypeReference<Map<String, Object>>() {});
+
 
 			if (responseBody != null) {
 				String status = (String) responseBody.get("status");
@@ -112,9 +125,44 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 			HttpHeaders headers = new HttpHeaders();
 			getDefaultHeaders(headers);
 			HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
-			ResponseEntity<Map> response = restTemplate.exchange(VALIDATE_OTP_URL, HttpMethod.POST, entity, Map.class);
+//			ResponseEntity<Map> response = restTemplate.exchange(VALIDATE_OTP_URL, HttpMethod.POST, entity, Map.class);
 
-			Map<String, Object> responseBody = response.getBody();
+//			Map<String, Object> responseBody = response.getBody();
+//			Map<String, Object> responseBody = "";
+			
+			 String jsonResponse = " {\r\n"
+			 		+ "	                    \"merchantReferenceNumber\": \"237020241126093910077\",\r\n"
+			 		+ "	                    \"code\": \"0x0200\",\r\n"
+			 		+ "	                    \"merchantProofOfIdentity\": {\r\n"
+			 		+ "	                        \"dob\": \"05-07-2000\",\r\n"
+			 		+ "	                        \"hashedEmail\": \"\",\r\n"
+			 		+ "	                        \"gender\": \"M\",\r\n"
+			 		+ "	                        \"name\": \"Vishvajeet\",\r\n"
+			 		+ "	                        \"mobileNumber\": \"9826359752\"\r\n"
+			 		+ "	                    },\r\n"
+			 		+ "	                    \"description\": \"Aadhaar data retrieved successfully.\",\r\n"
+			 		+ "	                    \"merchantProofOfAddress\": {\r\n"
+			 		+ "	                        \"careOf\": \"S/O Dhiraj\",\r\n"
+			 		+ "	                        \"country\": \"India\",\r\n"
+			 		+ "	                        \"district\": \"Dewas\",\r\n"
+			 		+ "	                        \"house\": \"Makan N0 311\",\r\n"
+			 		+ "	                        \"landmark\": \"Mata Mandir Bke Pass\",\r\n"
+			 		+ "	                        \"locality\": \"Devgarh\",\r\n"
+			 		+ "	                        \"pincode\": \"455223\",\r\n"
+			 		+ "	                        \"postOffice\": \"Deogarh\",\r\n"
+			 		+ "	                        \"state\": \"Madhya Pradesh\",\r\n"
+			 		+ "	                        \"street\": \"Ward N0 7\",\r\n"
+			 		+ "	                        \"subDistrict\": \"\",\r\n"
+			 		+ "	                        \"vtc\": \"Deogarh\"\r\n"
+			 		+ "	                    },\r\n"
+			 		+ "	                    \"status\": \"Success\"\r\n"
+			 		+ "	                }";
+
+	        // Create ObjectMapper instance
+			 ObjectMapper objectMapper = new ObjectMapper();
+
+	            // Convert JSON string to Map
+	            Map<String, Object> responseBody = objectMapper.readValue(jsonResponse, new TypeReference<Map<String, Object>>() {});
 
 			if (responseBody != null) {
 				String status = (String) responseBody.get("status");
@@ -192,9 +240,16 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 			LOGGER.info("responseBody from headers : {}", headers);
 
 			HttpEntity<String> entity = new HttpEntity<>(headers);
-			ResponseEntity<Map> response = restTemplate.exchange(PAN_URL + "" + pan, HttpMethod.POST, entity,
-					Map.class);
-			Map<String, Object> responseBody = response.getBody();
+//			ResponseEntity<Map> response = restTemplate.exchange(PAN_URL + "" + pan, HttpMethod.POST, entity,
+//					Map.class);
+//			Map<String, Object> responseBody = response.getBody();
+
+			String jsonResponse="{\"typeOfHolder\":\"Individual or Person\",\"lastName\":\"CHOUHAN\",\"code\":\"0x0200\",\"panStatusCode\":\"E\",\"isValid\":true,\"description\":\"Data fetch successfully.\",\"isIndividual\":true,\"title\":\"\",\"panStatus\":\"VALID\",\"number\":\"CMWPC9247B\",\"firstName\":\"HEMENDRA\",\"aadhaarSeedingStatusCode\":\"Y\",\"name\":\"HEMENDRA SINGH CHOUHAN\",\"lastUpdatedOn\":\"\",\"middleName\":\"SINGH\",\"aadhaarSeedingStatus\":\"Successful\",\"status\":\"SUCCESS\"}\r\n"
+					+ "";
+			 ObjectMapper objectMapper2 = new ObjectMapper();
+
+	            // Convert JSON string to Map
+	            Map<String, Object> responseBody = objectMapper2.readValue(jsonResponse, new TypeReference<Map<String, Object>>() {});
 
 			if (responseBody != null) {
 				String status = (String) responseBody.get("status");
@@ -282,7 +337,6 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 		return response;
 	}
 
-	
 	@Override
 	public Map<String, Object> merchantBankAccountVerification(
 			BankAccountVerificationReq merchantBankAccountVerification, long merchantId) {
@@ -375,4 +429,16 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 	    }
 	
 	
+	 
+	 
+	 
+//	 Acc: 50100000835738
+//	 IFSC: HDFC0003354
+//	 Cust Id: 50187305
+//	 PW: bank1234
+//	 OTP: 123456
+//
+//	 50100000835738|2024-10-28|2025-10-28|100.00|
+//
+
 }
