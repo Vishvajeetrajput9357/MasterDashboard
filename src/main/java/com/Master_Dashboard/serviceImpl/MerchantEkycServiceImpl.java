@@ -365,7 +365,7 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 
 				if ("0x0200".equals(code) && "Success".equalsIgnoreCase(status)) {
 
-					if ("Data fetch successfully.".equalsIgnoreCase(description)) {
+					if ("Data fetch successfully.".equalsIgnoreCase(description) || "Account verified successfully".equalsIgnoreCase(description)) {
 						map.put(ResponseMessage.CODE, ResponseMessage.SUCCESS);
 						map.put(ResponseMessage.FIELD, ResponseMessage.API_STATUS_SUCCESS);
 						map.put(ResponseMessage.DESCRIPTION, "The Bank Account verification has been successful.");
