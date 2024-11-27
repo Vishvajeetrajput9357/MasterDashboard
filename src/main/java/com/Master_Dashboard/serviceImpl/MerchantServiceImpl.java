@@ -137,7 +137,11 @@ public class MerchantServiceImpl implements MerchantsService {
 
 					
 					if (!(MerchantInfo.getIsMerchantActive().equalsIgnoreCase("Y")
-							&& MerchantInfo.getIsMerchantActive().equalsIgnoreCase("Y"))) {
+							&& MerchantInfo.getIsMerchantActive().equalsIgnoreCase("Y"))
+							
+							|| !verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("PAN"))
+								|| !verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("AADHAAR"))
+								|| !verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("BANKACCOUNT"))) {
 						map.put(ResponseMessage.STATUS, ResponseMessage.API_STATUS_FAILED);
 						map.put(ResponseMessage.CODE, ResponseMessage.PENDING_FOR_KYC);
 						map.put(ResponseMessage.DESCRIPTION, ResponseMessage.MERCHANT_KYC);	
@@ -146,6 +150,7 @@ public class MerchantServiceImpl implements MerchantsService {
 						map.put("BaKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("BANKACCOUNT")));
 						map.put("Client-Id", Encryption.decString(MerchantInfo.getClientId()));
 						map.put("Client-Secret", Encryption.decString(MerchantInfo.getClientSecret()));
+						
 					} else {
 
 						SimpleDateFormat formateDate = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss");
@@ -159,7 +164,6 @@ public class MerchantServiceImpl implements MerchantsService {
 						map.put("Client-Id", Encryption.decString(MerchantInfo.getClientId()));
 						map.put("Client-Secret", Encryption.decString(MerchantInfo.getClientSecret()));
 						map.put("code", "0x0200");
-						
 						
 						map.put("pKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("PAN")));
 						map.put("AaKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("AADHAAR")));
