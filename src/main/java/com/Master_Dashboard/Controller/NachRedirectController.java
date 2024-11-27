@@ -18,7 +18,7 @@ public class NachRedirectController {
 		ModelAndView model = new ModelAndView();
 		try {
 
-			
+			System.out.println("jhgsdfsdkjflsdhkfhsldj");
 //			"50100000835738|2024-11-25|2025-11-25|100.00|"
 			
 			model.setViewName("user/CreateNach");

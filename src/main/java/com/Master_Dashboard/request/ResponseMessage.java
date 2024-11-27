@@ -46,9 +46,11 @@ public class ResponseMessage {
 	public static final   String API_STATUS_SUCCESS = "Success";
 	public static final   String API_STATUS_PENDING = "Pending";
 	public static final   String API_STATUS_FAILED = "Failed";
+	public static final   String PENDING_FOR_KYC = "0x0209";
 	public static final   String API_STATUS_REFUND = "REFUND";
 
 	public static final   String UNAUTHORISED_DESCRIPTION = "Unauthorized Access to the Platform.";
+	public static final   String MERCHANT_KYC = "Merchant KYC not complete.";
 	public static final   String DEBIT_AMOUNT_NOT_AVAILABLE = "Debit Amount not available";
 	public static final   String MERCHANTTRXNREFID_ALREADY_EXIST = "merchantTrxnRefId already exist please try unique id";
 	public static final   String MERCHANT_ALREADY_EXIST = "Merchant is alreay exist.";
