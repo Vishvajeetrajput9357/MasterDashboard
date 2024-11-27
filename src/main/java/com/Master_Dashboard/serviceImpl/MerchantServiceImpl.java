@@ -144,8 +144,8 @@ public class MerchantServiceImpl implements MerchantsService {
 						map.put("pKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("PAN")));
 						map.put("AaKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("AADHAAR")));
 						map.put("BaKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("BANKACCOUNT")));
-						map.put("client-id", Encryption.decString(MerchantInfo.getClientId()));
-						map.put("client-secret", Encryption.decString(MerchantInfo.getClientSecret()));
+						map.put("Client-Id", Encryption.decString(MerchantInfo.getClientId()));
+						map.put("Client-Secret", Encryption.decString(MerchantInfo.getClientSecret()));
 					} else {
 
 						SimpleDateFormat formateDate = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss");
@@ -156,8 +156,8 @@ public class MerchantServiceImpl implements MerchantsService {
 								+ Encryption.decString(Merchants.getMerchantLastname()));
 						map.put("loggedIn", true);
 						map.put("firstName", Encryption.decString(Merchants.getMerchantFirstname()));
-						map.put("client-id", Encryption.decString(MerchantInfo.getClientId()));
-						map.put("client-secret", Encryption.decString(MerchantInfo.getClientSecret()));
+						map.put("Client-Id", Encryption.decString(MerchantInfo.getClientId()));
+						map.put("Client-Secret", Encryption.decString(MerchantInfo.getClientSecret()));
 						map.put("code", "0x0200");
 						
 						
