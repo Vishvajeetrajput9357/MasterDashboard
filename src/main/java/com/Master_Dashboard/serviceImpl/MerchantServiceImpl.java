@@ -29,7 +29,7 @@ public class MerchantServiceImpl implements MerchantsService {
 
 	@Autowired
 	private MerchantsRepository merchantsRepository;
-	
+
 	@Autowired
 	private MerchantInfoRepository merchantInfoRepository;
 
@@ -38,7 +38,7 @@ public class MerchantServiceImpl implements MerchantsService {
 
 	@Autowired
 	private VerificationRepository verificationRepository;
-	
+
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MerchantServiceImpl.class);
 
 	@Override
@@ -135,22 +135,29 @@ public class MerchantServiceImpl implements MerchantsService {
 					LOGGER.info("Merchant is loginRequest: {}",Merchants.getIsMerchantActive());
 					LOGGER.info("Merchant is loginRequest: {}",MerchantInfo.getIsMerchantActive());
 
-					
 					if (!(MerchantInfo.getIsMerchantActive().equalsIgnoreCase("Y")
-							&& MerchantInfo.getIsMerchantActive().equalsIgnoreCase("Y"))
-							
-							|| !verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("PAN"))
-								|| !verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("AADHAAR"))
-								|| !verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("BANKACCOUNT"))) {
-						map.put(ResponseMessage.STATUS, ResponseMessage.API_STATUS_FAILED);
-						map.put(ResponseMessage.CODE, ResponseMessage.PENDING_FOR_KYC);
-						map.put(ResponseMessage.DESCRIPTION, ResponseMessage.MERCHANT_KYC);	
-						map.put("pKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("PAN")));
-						map.put("AaKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("AADHAAR")));
-						map.put("BaKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("BANKACCOUNT")));
-						map.put("Client-Id", Encryption.decString(MerchantInfo.getClientId()));
-						map.put("Client-Secret", Encryption.decString(MerchantInfo.getClientSecret()));
+							&& MerchantInfo.getIsMerchantActive().equalsIgnoreCase("Y"))){
 						
+						if ( !verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("PAN"))
+									|| !verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("AADHAAR"))
+									|| !verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("BANKACCOUNT"))) {
+							
+							map.put(ResponseMessage.STATUS, ResponseMessage.API_STATUS_FAILED);
+							map.put(ResponseMessage.CODE, ResponseMessage.PENDING_FOR_KYC);
+							map.put(ResponseMessage.DESCRIPTION, ResponseMessage.MERCHANT_KYC);	
+							map.put("pKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("PAN")));
+							map.put("AaKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("AADHAAR")));
+							map.put("BaKy", verificationRepository.existsByMerchantIdAndVerificationType(merchantInfo.get().getMerchantId(),Encryption.encString("BANKACCOUNT")));
+							map.put("Client-Id", Encryption.decString(MerchantInfo.getClientId()));
+							map.put("Client-Secret", Encryption.decString(MerchantInfo.getClientSecret()));
+							
+							LOGGER.info("Merchant is loginRequest failed: ");
+	
+						}else {
+							map.put(ResponseMessage.STATUS, ResponseMessage.API_STATUS_FAILED);
+							map.put(ResponseMessage.CODE, ResponseMessage.PENDING_FOR_SELF_APPROVAL);
+							map.put(ResponseMessage.DESCRIPTION, ResponseMessage.PENDING_FOR_SELF_APPROVAL_DESCRIPTION);	
+						}
 					} else {
 
 						SimpleDateFormat formateDate = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss");
