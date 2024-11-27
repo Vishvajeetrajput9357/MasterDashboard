@@ -29,7 +29,7 @@ private CoreTempRepository coreTempRepository;
 	}
 	
 //	@PostMapping(value = "/paymentLink")
-	@RequestMapping(value = "/paymentLink", method = RequestMethod.GET)
+	@RequestMapping(value = "/paymentLink", method = RequestMethod.POST)
 	public  ModelAndView paymentLink(/* @RequestBody String reqbody */) {
 		String reqbody="";
 		System.out.println(reqbody);
