@@ -28,10 +28,8 @@ private CoreTempRepository coreTempRepository;
 		 this.coreTempRepository=coreTempRepository;
 	}
 	
-//	@PostMapping(value = "/paymentLink")
 	@RequestMapping(value = "/paymentLink", method = RequestMethod.POST)
-	public  ModelAndView paymentLink(/* @RequestBody String reqbody */) {
-		String reqbody="";
+	public  ModelAndView paymentLink( @RequestBody String reqbody ) {
 		System.out.println(reqbody);
 		Map<String,Object> map = new HashMap<String,Object>();
 		ModelAndView model = new ModelAndView();
