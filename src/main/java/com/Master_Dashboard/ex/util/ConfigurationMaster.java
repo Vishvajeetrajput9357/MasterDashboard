@@ -4,9 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
-import com.Master_Dashboard.repository.MerchantsRepository;
-
-
 @Configuration
 public class ConfigurationMaster {
 
@@ -15,4 +12,8 @@ public class ConfigurationMaster {
         return new RestTemplate();
     }
    
+    @Bean
+    public SetErrorResponses setErrorResponses() {
+        return new SetErrorResponses();
+    }
 }

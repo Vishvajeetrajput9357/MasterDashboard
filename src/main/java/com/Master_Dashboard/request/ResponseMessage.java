@@ -49,6 +49,7 @@ public class ResponseMessage {
 	public static final   String PENDING_FOR_KYC = "0x0209";
 	public static final   String PENDING_FOR_SELF_APPROVAL = "0x0210";
 	public static final   String API_STATUS_REFUND = "REFUND";
+	public static final   String MANDATE_URL_SUCCESS = "Mandate request has been intiated successfully.";
 
 	public static final   String UNAUTHORISED_DESCRIPTION = "Unauthorized Access to the Platform.";
 	public static final   String MERCHANT_KYC = "Merchant KYC not complete.";

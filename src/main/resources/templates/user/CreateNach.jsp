@@ -5,7 +5,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Fidypay</title>
+	<title>KJSSTPAY</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
 	<link rel="stylesheet" href="style.module.css" />
@@ -60,7 +60,7 @@
 
             <div class="form-group">
                 <label for="MsgId">MsgId</label>
-                <input type="text" ID="MsgId" name="MsgId" value="KJ757687689vis">
+                <input type="text" ID="MsgId" name="MsgId" th:value="${messageId}">
             </div>
 
             <div class="form-group">
@@ -140,7 +140,7 @@
 
             <div class="form-group">
                 <label for="Channel">Channel</label>
-                <input type="text" ID="Channel" name="Channel" value="NET">
+                <input type="text" ID="Channel" name="Channel" th:value="${Debit}">
             </div>
 
             <div class="form-group">

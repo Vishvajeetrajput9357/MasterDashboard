@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URLDecoder;
 import com.Master_Dashboard.entity.CoreTempTrxn;
+import com.Master_Dashboard.ex.util.GenrateUniqueId;
 import com.Master_Dashboard.repository.CoreTempRepository;
 
 @Controller
@@ -18,12 +19,12 @@ import com.Master_Dashboard.repository.CoreTempRepository;
 public class PaymentLinkController {
 
 	private CoreTempRepository coreTempRepository;
+	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MerchantController.class);
+
 
 	public PaymentLinkController(CoreTempRepository coreTempRepository) {
 		this.coreTempRepository = coreTempRepository;
 	}
-
-	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MerchantController.class);
 
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/paymentLink", method = RequestMethod.POST)
@@ -79,6 +80,31 @@ public class PaymentLinkController {
 
 		}
 		model.setViewName("user/merchantRedirectPage");
+		return model;
+	}
+	
+	@RequestMapping(value = "/createMandate", method = RequestMethod.GET)
+	public ModelAndView paymentLink() {
+		
+		LOGGER.info("Inside genrate Madate form...");
+		
+		ModelAndView model = new ModelAndView();
+		try {
+			String uniqueId=GenrateUniqueId.generateUniqueId();
+
+			LOGGER.info("uniqueId : {}",uniqueId);
+			
+//		"50100000835738|2024-11-25|2025-11-25|100.00|"
+//		String authType="Debit";
+		String authType="NET";
+//			String authType="AADHAAR";
+			model.addObject("messageId", uniqueId);
+			model.addObject("Debit", authType);
+			model.setViewName("user/CreateNach");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return model;
 	}
 }

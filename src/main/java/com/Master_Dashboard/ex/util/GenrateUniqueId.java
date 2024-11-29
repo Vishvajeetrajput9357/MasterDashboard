@@ -1,0 +1,18 @@
+package com.Master_Dashboard.ex.util;
+import java.util.UUID;
+
+public class GenrateUniqueId {
+
+	    public static String generateUniqueId() {
+	      
+	    	long currentTimeMillis = System.currentTimeMillis();
+	    	
+	    	System.out.println(currentTimeMillis);
+	        String uuid = UUID.randomUUID().toString().replace("-", "").substring(0, 15); // Get a substring of length 15
+	        String uniqueId = currentTimeMillis + uuid;
+	        if (uniqueId.length() > 20) {
+	            uniqueId = uniqueId.substring(0, 20);
+	        }
+	        return "KJ"+uniqueId.toUpperCase();
+	    }
+}
