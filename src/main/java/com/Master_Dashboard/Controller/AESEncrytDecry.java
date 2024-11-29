@@ -87,5 +87,5 @@ public class AESEncrytDecry {
         System.out.println("Customer_Reference2 -> "+AESEncrytDecry.Encrypt("KJ1887348747"));
         System.out.println("UtilCode -> "+AESEncrytDecry.Encrypt("NACH00000000000020"));
     }
- 
+// https://emandateuat.hdfcbank.com/testingapi.sapx
 }	

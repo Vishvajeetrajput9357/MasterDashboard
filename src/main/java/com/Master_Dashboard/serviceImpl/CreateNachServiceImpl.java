@@ -15,12 +15,8 @@ public class CreateNachServiceImpl implements CreateNachService {
 	public Map<String, Object> createNach() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		
-		 map.put("Sucess","http://localhost:8090/admin/redirect/paymentLink");
+		map.put("Sucess","http://localhost:8090/dashboard/redirect/paymentLink");
 		 return map;
-		
-		
-		
 	}
 
 	

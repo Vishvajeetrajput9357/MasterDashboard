@@ -9,4 +9,6 @@ public class MasterDashboardApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MasterDashboardApplication.class, args);
 	}
+	
 }
+
