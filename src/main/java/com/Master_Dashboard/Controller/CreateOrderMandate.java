@@ -28,7 +28,9 @@ import org.slf4j.Logger;
 public class CreateOrderMandate {
 
 	private CreateNachService createNachService;
+	
 	private MerchantInfoRepository merchantInfoRepository;
+	
 	private SetErrorResponses setErrorResponses;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CreateOrderMandate.class);
@@ -44,14 +46,14 @@ public class CreateOrderMandate {
 	@PostMapping("/createMandate")
 	public Map<String, Object> createMandate(@RequestHeader("Client-Id") String clientId,
 			@RequestHeader("Client-Secret") String clientSecret,
-			@Valid @RequestBody CreateMandateRequest CreateMandateRequest) {
+			@Valid @RequestBody CreateMandateRequest createMandateRequest) {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			Optional<MerchantInfo> merchantInfoOpt = validateMerchant(clientId, clientSecret);
 			if (!merchantInfoOpt.isPresent()) {
 				return setErrorResponses.setUnauthorised(map);
 			}
-			return createNachService.createNach(CreateMandateRequest);
+			return createNachService.createNach(createMandateRequest);
 
 		} catch (Exception e) {
 			e.printStackTrace();
