@@ -15,7 +15,7 @@ import com.Master_Dashboard.service.CreateNachService;
 @Service
 public class CreateNachServiceImpl implements CreateNachService {
 
-	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MerchantEkycServiceImpl.class);
+//	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MerchantEkycServiceImpl.class);
 	
 	@Override
 	public Map<String, Object> createNach(CreateMandateRequest createMandateRequest) {
@@ -28,5 +28,4 @@ public class CreateNachServiceImpl implements CreateNachService {
 		 return map;
 	}
 
-	
 }

@@ -232,9 +232,4 @@ public class CreateMandateRequest {
 			this.additionalParam5 = additionalParam5;
 		}
 
-		
-		
-
-	    
-
 }

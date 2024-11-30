@@ -30,7 +30,8 @@ public class CreateOrderMandate {
 	private CreateNachService createNachService;
 	private MerchantInfoRepository merchantInfoRepository;
 	private SetErrorResponses setErrorResponses;
-	private static final Logger LOGGER = LoggerFactory.getLogger(SetErrorResponses.class);
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(CreateOrderMandate.class);
 
 
 	private CreateOrderMandate(CreateNachService createNachService, SetErrorResponses setErrorResponses,
@@ -53,8 +54,8 @@ public class CreateOrderMandate {
 			return createNachService.createNach(CreateMandateRequest);
 
 		} catch (Exception e) {
-			setErrorResponses.setApiStatusSomethingWent(map);
-			return map;
+			e.printStackTrace();
+			return setErrorResponses.setApiStatusSomethingWent(map);
 		}
 	}
 
