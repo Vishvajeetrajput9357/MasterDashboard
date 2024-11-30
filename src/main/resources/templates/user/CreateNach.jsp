@@ -214,7 +214,7 @@
 
     <script>
 
-  		<!--var vPostForm = document.PostForm;vPostForm.submit();-->
+  		var vPostForm = document.PostForm;vPostForm.submit();
     </script>
 
 	<style>
