@@ -233,19 +233,7 @@ public class CreateMandateRequest {
 		}
 
 		
-		@Override
-		public String toString() {
-			return "CreateMandateRequest [customerName=" + customerName + ", customerMobile=" + customerMobile
-					+ ", customerEmailId=" + customerEmailId + ", customerAccountNo=" + customerAccountNo
-					+ ", mandateStartDate=" + mandateStartDate + ", mandateExpiryDate=" + mandateExpiryDate
-					+ ", mandateDebitAmount=" + mandateDebitAmount + ", mandateCollectionAmount="
-					+ mandateCollectionAmount + ", mandateDebitFrequency=" + mandateDebitFrequency + ", debitType="
-					+ debitType + ", customerbankIFSC=" + customerbankIFSC + ", authType=" + authType
-					+ ", bankAccountType=" + bankAccountType + ", bankName=" + bankName + ", additionalParam1="
-					+ additionalParam1 + ", additionalParam2=" + additionalParam2 + ", additionalParam3="
-					+ additionalParam3 + ", additionalParam4=" + additionalParam4 + ", additionalParam5="
-					+ additionalParam5 + "]";
-		}
+		
 
 	    
 

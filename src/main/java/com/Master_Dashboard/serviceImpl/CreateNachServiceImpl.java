@@ -20,7 +20,7 @@ public class CreateNachServiceImpl implements CreateNachService {
 	@Override
 	public Map<String, Object> createNach(CreateMandateRequest createMandateRequest) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		LOGGER.info(createMandateRequest.toString());
+//		LOGGER.info(createMandateRequest.toString());
 		map.put(ResponseMessage.STATUS, ResponseMessage.STATUS_SUCCESS);
 		map.put(ResponseMessage.CODE, ResponseMessage.SUCCESS);
 		map.put(ResponseMessage.DESCRIPTION, ResponseMessage.MANDATE_URL_SUCCESS);
