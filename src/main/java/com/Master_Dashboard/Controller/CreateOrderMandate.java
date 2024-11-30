@@ -50,7 +50,7 @@ public class CreateOrderMandate {
 			if (!merchantInfoOpt.isPresent()) {
 				return setErrorResponses.setUnauthorised(map);
 			}
-			return createNachService.createNach();
+			return createNachService.createNach(CreateMandateRequest);
 
 		} catch (Exception e) {
 			setErrorResponses.setApiStatusSomethingWent(map);
@@ -62,7 +62,6 @@ public class CreateOrderMandate {
 		try {
 			String encryptedClientId = Encryption.encString(clientId);
 			String encryptedClientSecret = Encryption.encString(clientSecret);
-
 			return merchantInfoRepository.findByClientIdAndClientSecret(encryptedClientId, encryptedClientSecret);
 		} catch (Exception e) {
 			LOGGER.error("Error occurred during merchant validation", e);

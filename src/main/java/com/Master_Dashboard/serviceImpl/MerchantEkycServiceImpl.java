@@ -3,14 +3,12 @@ package com.Master_Dashboard.serviceImpl;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
-import com.Master_Dashboard.Controller.MerchantController;
 import com.Master_Dashboard.Encryption.Encryption;
 import com.Master_Dashboard.entity.Merchants;
 import com.Master_Dashboard.entity.VerificationEntity;
@@ -28,7 +26,6 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MerchantEkycServiceImpl.class);
 
 	private final MerchantsRepository merchantsRepository;
-
 	private final VerificationRepository verificationRepository;
 
 	private final RestTemplate restTemplate;
@@ -427,15 +424,12 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 	        // Combine and limit to 20 characters
 	        return (formattedDateTime + randomPart).substring(0, 20);
 	    }
-	
-	
-	 
-	 
-	 
+		 
 //	 Acc: 50100000835738
 //	 IFSC: HDFC0003354
 //	 Cust Id: 50187305
 //	 PW: bank1234
 //	 OTP: 123456
 //	 50100000835738|2024-10-28|2025-10-28|100.00|
+	 
 }
