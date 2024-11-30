@@ -437,8 +437,5 @@ public class MerchantEkycServiceImpl implements MerchantEkycService {
 //	 Cust Id: 50187305
 //	 PW: bank1234
 //	 OTP: 123456
-//
 //	 50100000835738|2024-10-28|2025-10-28|100.00|
-//
-
 }
