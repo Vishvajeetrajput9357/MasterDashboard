@@ -80,6 +80,7 @@ public class ResponseMessage {
 	public   static final String INVALID_VPA = "Invalid UPI ID";
 	public   static final String DATA = "Data";
 	public   static final String INVALID_EMAIL_OR_PASSWORD = "Invalid user email or password";
+	public   static final String ENACH_TRANSACTION_LIST = "ENach Transaction List";
 
 	public   static final String PAYMENT_CANNOT = "Payment cannot be accepted at this time. Please try again later.";
 	public static final String MERCHANT_TRXN_ID_ = "merchantTrxnRefId";

@@ -16,4 +16,10 @@ public class ConfigurationMaster {
     public SetErrorResponses setErrorResponses() {
         return new SetErrorResponses();
     }
+
+//    transactionReportController
+//    @Bean
+//    public SetErrorResponses setErrorResponses() {
+//        return new SetErrorResponses();
+//    }
 }

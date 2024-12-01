@@ -1,0 +1,98 @@
+package com.Master_Dashboard.request;
+
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.beans.factory.annotation.Value;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+public class ENachTransactionRequest {
+
+	@NotBlank(message = "start date can not be blank")
+	private String startDate;
+	
+	@NotBlank(message = "end date can not be blank")
+	private String endDate;
+	
+	@Value("10")
+	private Integer pageSize;
+
+	@Value("0")
+	private Integer pageNo;
+	
+	@Value("0")
+	private String serviceName;
+
+	@Value("0")
+	private Long statusId;
+	
+	@JsonIgnore
+	private Long merchantId;
+
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public Integer getPageNo() {
+		return pageNo;
+	}
+
+	public void setPageNo(Integer pageNo) {
+		this.pageNo = pageNo;
+	}
+
+	public String getServiceName() {
+		return serviceName;
+	}
+
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
+	}
+
+	public Long getStatusId() {
+		return statusId;
+	}
+
+	public void setStatusId(Long statusId) {
+		this.statusId = statusId;
+	}
+
+	public Long getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
+	}
+
+	
+	@Override
+	public String toString() {
+		return "ENachTransactionRequest [startDate=" + startDate + ", endDate=" + endDate + ", pageSize=" + pageSize
+				+ ", pageNo=" + pageNo + ", serviceName=" + serviceName + ", statusId=" + statusId + ", merchantId="
+				+ merchantId + "]";
+	}
+
+	
+	
+}

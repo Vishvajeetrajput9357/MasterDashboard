@@ -1,11 +1,23 @@
 package com.Master_Dashboard.ex.util;
 
 import java.util.Map;
+import java.util.Optional;
+
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.Master_Dashboard.Encryption.Encryption;
+import com.Master_Dashboard.entity.MerchantInfo;
+import com.Master_Dashboard.repository.MerchantInfoRepository;
 import com.Master_Dashboard.request.ResponseMessage;
+import com.Master_Dashboard.serviceImpl.MerchantEkycServiceImpl;
 
 public class SetErrorResponses {
-
-
+	
+	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MerchantEkycServiceImpl.class);
+	
+	@Autowired
+	private MerchantInfoRepository merchantInfoRepository;
 	
 	public Map<String, Object> setUnauthorised(Map<String, Object> map) {
 		map.put(ResponseMessage.CODE, ResponseMessage.UNAUTHORISED);
@@ -21,6 +33,17 @@ public class SetErrorResponses {
 		return map;
 	}
 	
+	public Optional<MerchantInfo> validateMerchant(String clientId, String clientSecret) {
+		try {
+			String encryptedClientId = Encryption.encString(clientId);
+			String encryptedClientSecret = Encryption.encString(clientSecret);
+
+			return merchantInfoRepository.findByClientIdAndClientSecret(encryptedClientId, encryptedClientSecret);
+		} catch (Exception e) {
+			LOGGER.error("Error occurred during merchant validation", e);
+			return Optional.empty();
+		}
+	}
 	
 	
 }
