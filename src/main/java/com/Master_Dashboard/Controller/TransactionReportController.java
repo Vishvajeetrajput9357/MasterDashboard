@@ -16,6 +16,7 @@ import com.Master_Dashboard.Response.EnachTransactionReport;
 import com.Master_Dashboard.Response.EnachTrxnReportResPayload;
 import com.Master_Dashboard.entity.MerchantInfo;
 import com.Master_Dashboard.ex.util.SetErrorResponses;
+import com.Master_Dashboard.repository.EnachTransactionDetailsRepository;
 import com.Master_Dashboard.request.ENachTransactionRequest;
 import com.Master_Dashboard.request.ResponseMessage;
 import com.Master_Dashboard.service.TransactionReportService;
@@ -27,13 +28,15 @@ public class TransactionReportController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MerchantController.class);
 	
-	@Autowired
 	private TransactionReportService transactionReportService;
-	@Autowired
 	private SetErrorResponses setErrorResponses;
+	private EnachTransactionDetailsRepository enachTransactionDetailsRepository;
 
-	public TransactionReportController(TransactionReportService transactionReportService) {
+	public TransactionReportController(TransactionReportService transactionReportService,
+			SetErrorResponses setErrorResponses, EnachTransactionDetailsRepository enachTransactionDetailsRepository) {
 		this.transactionReportService = transactionReportService;
+		this.setErrorResponses = setErrorResponses;
+		this.enachTransactionDetailsRepository = enachTransactionDetailsRepository;
 	}
 
 	@PostMapping("/EnachTransactionReport")
@@ -59,7 +62,10 @@ public class TransactionReportController {
 						ResponseMessage.FAILED,"NA", null);
 			} else {
 				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_SUCCESS,
-						ResponseMessage.ENACH_TRANSACTION_LIST, ResponseMessage.SUCCESS,data.size()+"" , data);
+						ResponseMessage.ENACH_TRANSACTION_LIST, ResponseMessage.SUCCESS,enachTransactionDetailsRepository.findTotalENachTransactionRequest(
+								enachTransactionRequest.getStartDate()+" 00:00:00", enachTransactionRequest.getEndDate()+" 23:59:59",
+								enachTransactionRequest.getServiceName(), enachTransactionRequest.getStatusId(),
+								enachTransactionRequest.getMerchantId())+"" , data);
 			}
 
 		} catch (Exception e) {

@@ -27,4 +27,20 @@ public interface EnachTransactionDetailsRepository extends JpaRepository<ENachTr
 	    @Param("merchantId") Long merchantId,
 	    Pageable pageable 
 	);
+	
+	
+	@Query(value = "SELECT count(*) " +
+            "FROM enach_transaction_details p " +
+            "WHERE p.transaction_date BETWEEN :startDate AND :endDate " +
+            "  AND (COALESCE(:statusId, '') = '' OR p.transaction_status_id = COALESCE(NULLIF(:statusId, ''), p.transaction_status_id)) " +
+            "  AND (COALESCE(:merchantId, '') = '' OR p.merchant_id = COALESCE(NULLIF(:merchantId, ''), p.merchant_id)) " +
+            "  AND (COALESCE(:serviceName, '') = '' OR p.service_name = COALESCE(NULLIF(:serviceName, ''), p.service_name))", 
+    nativeQuery = true)
+	int findTotalENachTransactionRequest(
+	    @Param("startDate") String startDate,
+	    @Param("endDate") String endDate,
+	    @Param("serviceName") String serviceName,
+	    @Param("statusId") Long statusId,
+	    @Param("merchantId") Long merchantId
+	);
 }

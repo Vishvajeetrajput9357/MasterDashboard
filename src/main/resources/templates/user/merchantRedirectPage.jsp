@@ -22,7 +22,7 @@
     </script>
 </head>
 
-<body th:onload="onLoadSubmit()">
+<body>
 	
 	<header style="box-shadow: 0 5px 10px rgb(0 0 0 / 0.2)">
 	       <div class="header_section"
@@ -33,7 +33,7 @@
 	           <div>
 	               <img th:src="@{/Images/merchantLogo.png}" style="width: 80px; height: 50px" />
 	           </div>
-	       </div>
+	       </div>	
 	   </header>
 
 	   <div class="section_container">
@@ -50,16 +50,17 @@
 						  <center> <div class="loader"></div></center>
 	                   </div>
 			   
-			   <form name="login" id="login" th:action="${redirectURL}" method="post">
-			           <input type="hidden" name="mode" th:value="${mode}" />
-			           <input type="hidden" name="txnid" th:value="${txnid}" />
-			           <input type="hidden" name="date" th:value="${date}" />
-			           <input type="hidden" name="amount" th:value="${amount}" />
-			           <input type="hidden" name="status" th:value="${status}" />
-			       </form>
+			  
 	       </div>
 		   </div>
+<script>
+	
+	setTimeout(function() {
+	    window.location.href = "http://localhost:5173/";
+	}, 1000); // Delay in milliseconds (5000ms = 5 seconds)
 
+	
+</script>
 	       <style>
 	           .resend_OTP {
 	               letter-spacing: 2px;

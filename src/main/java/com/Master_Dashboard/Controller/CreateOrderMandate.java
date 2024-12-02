@@ -53,6 +53,8 @@ public class CreateOrderMandate {
 			if (!merchantInfoOpt.isPresent()) {
 				return setErrorResponses.setUnauthorised(map);
 			}
+			
+			LOGGER.info("createMandate : "+createMandateRequest.toString());
 			return createNachService.createNach(createMandateRequest);
 
 		} catch (Exception e) {

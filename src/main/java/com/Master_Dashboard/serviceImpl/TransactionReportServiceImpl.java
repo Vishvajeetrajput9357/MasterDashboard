@@ -42,7 +42,7 @@ public class TransactionReportServiceImpl implements TransactionReportService {
 				enachTransactionRequest.getServiceName(), enachTransactionRequest.getStatusId(),
 				enachTransactionRequest.getMerchantId(), pageable);
 		List<EnachTrxnReportResPayload> payloadList = new ArrayList<>();
-
+		LOGGER.info("eNachTransactionDetails:  "+result.getSize());
 		int i = 0;
 		for (ENachTransactionDetails eNachTransactionDetails : result.getContent()) {
 			i++;

@@ -11,6 +11,129 @@
 		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
 	<link rel="stylesheet" href="style.module.css" />
 
+	<style>
+	@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+	* {
+	  box-sizing: border-box;
+	  margin: 0;
+	  padding: 0;
+	}
+
+	body {
+	  width: 100%;
+	  height: 100vh;
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(0, 152, 155, 1) 0.1%, RGB(245 139 91) 94.2%);
+	  background-size: cover;
+	  font-family: 'Montserrat', sans-serif;
+	  overflow: hidden;
+	}
+
+	.loading-container {
+	  width: 90%; /* Adjust width dynamically */
+	  max-width: 500px;
+	  text-align: center;
+	  color: #fff;
+	  position: relative;
+	  padding: 20px; /* Add some padding */
+	  margin: 0 auto; /* Center align */
+	}
+
+	.loading-container:before {
+	  content: '';
+	  position: absolute;
+	  width: 100%;
+	  height: 3px;
+	  background-color: #fff;
+	  bottom: 0;
+	  left: 0;
+	  border-radius: 10px;
+	  animation: movingLine 2.4s infinite ease-in-out;
+	}
+
+	@keyframes movingLine {
+	  0% {
+	    opacity: 0;
+	    width: 0;
+	  }
+	  33.3%, 66% {
+	    opacity: 0.8;
+	    width: 100%;
+	  }
+	  85% {
+	    width: 0;
+	    left: initial;
+	    right: 0;
+	    opacity: 1;
+	  }
+	  100% {
+	    opacity: 0;
+	    width: 0;
+	  }
+	}
+
+	.loading-text {
+	  line-height: 1.5em;
+	  letter-spacing: 2px;
+	  margin-bottom: 32px;
+	  display: flex;
+	  justify-content: center;
+	  flex-wrap: wrap;
+	}
+
+	.loading-text span {
+	  animation: moveLetters 2.4s infinite ease-in-out;
+	  transform: translateX(0);
+	  position: relative;
+	  display: inline-block;
+	  opacity: 0;
+	  text-shadow: 0px 2px 10px rgba(46, 74, 81, 0.3);
+
+	}
+
+	.loading-text span:nth-child(1) { animation-delay: 0.1s; }
+	.loading-text span:nth-child(2) { animation-delay: 0.2s; }
+	.loading-text span:nth-child(3) { animation-delay: 0.3s; }
+	.loading-text span:nth-child(4) { animation-delay: 0.4s; }
+	.loading-text span:nth-child(5) { animation-delay: 0.5s; }
+	.loading-text span:nth-child(6) { animation-delay: 0.6s; }
+
+	@keyframes moveLetters {
+	  0% {
+	    transform: translateX(-15vw);
+	    opacity: 0;
+	  }
+	  33.3%, 66% {
+	    transform: translateX(0);
+	    opacity: 1;
+	  }
+	  100% {
+	    transform: translateX(12vw);
+	    opacity: 0;
+		
+	  }
+	}
+
+	@media (max-width: 768px) {
+	  .loading-text {
+	    font-size: 6vw; /* Larger for smaller screens */
+	    letter-spacing: 1px;
+	  }
+	}
+
+	@media (max-width: 480px) {
+	  .loading-container {
+	    padding: 10px;
+	  }
+	  .loading-text {
+	    font-size: 5vw; /* Even larger for extra small devices */
+	  }
+	}
+	</style>
+
 </head>
 <body>
 
@@ -213,133 +336,15 @@
     </div>
 
     <script>
-
-  		var vPostForm = document.PostForm;vPostForm.submit();
-    </script>
-
-	<style>
-	@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
-
-	* {
-	  box-sizing: border-box;
-	  margin: 0;
-	  padding: 0;
-	}
-
-	body {
-	  width: 100%;
-	  height: 100vh;
-	  display: flex;
-	  justify-content: center;
-	  align-items: center;
-	  background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(0, 152, 155, 1) 0.1%, RGB(245 139 91) 94.2%);
-	  background-size: cover;
-	  font-family: 'Montserrat', sans-serif;
-	  overflow: hidden;
-	}
-
-	.loading-container {
-	  width: 90%; /* Adjust width dynamically */
-	  max-width: 500px;
-	  text-align: center;
-	  color: #fff;
-	  position: relative;
-	  padding: 20px; /* Add some padding */
-	  margin: 0 auto; /* Center align */
-	}
-
-	.loading-container:before {
-	  content: '';
-	  position: absolute;
-	  width: 100%;
-	  height: 3px;
-	  background-color: #fff;
-	  bottom: 0;
-	  left: 0;
-	  border-radius: 10px;
-	  animation: movingLine 2.4s infinite ease-in-out;
-	}
-
-	@keyframes movingLine {
-	  0% {
-	    opacity: 0;
-	    width: 0;
-	  }
-	  33.3%, 66% {
-	    opacity: 0.8;
-	    width: 100%;
-	  }
-	  85% {
-	    width: 0;
-	    left: initial;
-	    right: 0;
-	    opacity: 1;
-	  }
-	  100% {
-	    opacity: 0;
-	    width: 0;
-	  }
-	}
-
-	.loading-text {
-	  line-height: 1.5em;
-	  letter-spacing: 2px;
-	  margin-bottom: 32px;
-	  display: flex;
-	  justify-content: center;
-	  flex-wrap: wrap;
-	}
-
-	.loading-text span {
-	  animation: moveLetters 2.4s infinite ease-in-out;
-	  transform: translateX(0);
-	  position: relative;
-	  display: inline-block;
-	  opacity: 0;
-	  text-shadow: 0px 2px 10px rgba(46, 74, 81, 0.3);
-
-	}
-
-	.loading-text span:nth-child(1) { animation-delay: 0.1s; }
-	.loading-text span:nth-child(2) { animation-delay: 0.2s; }
-	.loading-text span:nth-child(3) { animation-delay: 0.3s; }
-	.loading-text span:nth-child(4) { animation-delay: 0.4s; }
-	.loading-text span:nth-child(5) { animation-delay: 0.5s; }
-	.loading-text span:nth-child(6) { animation-delay: 0.6s; }
-
-	@keyframes moveLetters {
-	  0% {
-	    transform: translateX(-15vw);
-	    opacity: 0;
-	  }
-	  33.3%, 66% {
-	    transform: translateX(0);
-	    opacity: 1;
-	  }
-	  100% {
-	    transform: translateX(12vw);
-	    opacity: 0;
 		
-	  }
-	}
+		setTimeout(function() {
+		           var vPostForm = document.PostForm;
+		           vPostForm.submit();
+		       }, 3000);
 
-	@media (max-width: 768px) {
-	  .loading-text {
-	    font-size: 6vw; /* Larger for smaller screens */
-	    letter-spacing: 1px;
-	  }
-	}
-
-	@media (max-width: 480px) {
-	  .loading-container {
-	    padding: 10px;
-	  }
-	  .loading-text {
-	    font-size: 5vw; /* Even larger for extra small devices */
-	  }
-	}
-	</style>
-
+  		<!--var vPostForm = document.PostForm;vPostForm.submit();-->
+    </script>
+	
 	
 
 </body>

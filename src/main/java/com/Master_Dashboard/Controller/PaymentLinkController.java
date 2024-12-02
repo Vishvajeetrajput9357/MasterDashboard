@@ -21,14 +21,15 @@ public class PaymentLinkController {
 	private CoreTempRepository coreTempRepository;
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MerchantController.class);
 
-
 	public PaymentLinkController(CoreTempRepository coreTempRepository) {
 		this.coreTempRepository = coreTempRepository;
 	}
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/paymentLink", method = RequestMethod.POST)
-	public ModelAndView paymentLink(@RequestBody String reqbody) {
+	@RequestMapping(value = "/paymentLink", method = RequestMethod.GET)
+	public ModelAndView paymentLink(/* @RequestBody String reqbody */) {
+		
+		String reqbody="";
 		LOGGER.info(reqbody);
 		ModelAndView model = new ModelAndView();
 
@@ -84,7 +85,7 @@ public class PaymentLinkController {
 	}
 	
 	@RequestMapping(value = "/createMandate", method = RequestMethod.GET)
-	public ModelAndView paymentLink() {
+	public ModelAndView createMandate() {
 		
 		LOGGER.info("Inside genrate Madate form...");
 		
@@ -96,8 +97,8 @@ public class PaymentLinkController {
 			
 //		"50100000835738|2024-11-25|2025-11-25|100.00|"
 //		String authType="Debit";
-		String authType="NET";
-//			String authType="AADHAAR";
+//		String authType="NET";
+			String authType="AADHAAR";
 			model.addObject("messageId", uniqueId);
 			model.addObject("Debit", authType);
 			model.setViewName("user/CreateNach");
