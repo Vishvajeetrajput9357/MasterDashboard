@@ -22,7 +22,7 @@ public class CreateNachServiceImpl implements CreateNachService {
 		map.put(ResponseMessage.STATUS, ResponseMessage.STATUS_SUCCESS);
 		map.put(ResponseMessage.CODE, ResponseMessage.SUCCESS);
 		map.put(ResponseMessage.DESCRIPTION, ResponseMessage.MANDATE_URL_SUCCESS);
-		map.put("url", "http://localhost:8090/dashboard/nachRedirect/createMandate");
+		map.put("url", "https://empirical-tootsie-kjsstpay-6c9fa64e.koyeb.app/dashboard/nachRedirect/createMandate");
 		return map;
 	}
 }
