@@ -26,10 +26,9 @@ public class PaymentLinkController {
 	}
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/paymentLink", method = RequestMethod.GET)
-	public ModelAndView paymentLink(/* @RequestBody String reqbody */) {
+	@RequestMapping(value = "/paymentLink", method = RequestMethod.POST)
+	public ModelAndView paymentLink( @RequestBody String reqbody) {
 		
-		String reqbody="";
 		LOGGER.info(reqbody);
 		ModelAndView model = new ModelAndView();
 
