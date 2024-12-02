@@ -96,8 +96,8 @@ public class PaymentLinkController {
 			
 //		"50100000835738|2024-11-25|2025-11-25|100.00|"
 //		String authType="Debit";
-//		String authType="NET";
-			String authType="AADHAAR";
+		String authType="NET";
+//			String authType="AADHAAR";
 			model.addObject("messageId", uniqueId);
 			model.addObject("Debit", authType);
 			model.setViewName("user/CreateNach");
