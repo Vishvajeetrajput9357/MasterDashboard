@@ -5,7 +5,6 @@ import java.util.Optional;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +25,7 @@ import com.Master_Dashboard.service.TransactionReportService;
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 public class TransactionReportController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MerchantController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TransactionReportController.class);
 	
 	private TransactionReportService transactionReportService;
 	private SetErrorResponses setErrorResponses;
@@ -52,7 +51,7 @@ public class TransactionReportController {
 				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_FAILED, "Failed to fetch data",
 						ResponseMessage.UNAUTHORISED_DESCRIPTION,"NA", null);
 			}
-			enachTransactionRequest.setMerchantId(/* merchantInfo.getMerchantId() */ 0L);
+			enachTransactionRequest.setMerchantId(merchantInfo.getMerchantId());
 			LOGGER.info(enachTransactionRequest.toString());
 			
 			List<EnachTrxnReportResPayload> data = transactionReportService
@@ -61,11 +60,24 @@ public class TransactionReportController {
 				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_FAILED, "Failed to fetch data",
 						ResponseMessage.FAILED,"NA", null);
 			} else {
+				String startDate=enachTransactionRequest.getStartDate();
+				String endDate=enachTransactionRequest.getEndDate();
+				
+				if (enachTransactionRequest.getStartDate().equalsIgnoreCase("")|| enachTransactionRequest.getEndDate().equalsIgnoreCase("")) {
+					startDate=null;
+					endDate=null;
+				} else {
+					startDate=startDate+" 00:00:00";
+					endDate=endDate+" 23:59:59";
+				}
+				
 				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_SUCCESS,
-						ResponseMessage.ENACH_TRANSACTION_LIST, ResponseMessage.SUCCESS,enachTransactionDetailsRepository.findTotalENachTransactionRequest(
-								enachTransactionRequest.getStartDate()+" 00:00:00", enachTransactionRequest.getEndDate()+" 23:59:59",
+						ResponseMessage.ENACH_TRANSACTION_LIST, 
+						ResponseMessage.SUCCESS,enachTransactionDetailsRepository.findTotalENachTransactionRequest(
+								startDate,endDate,
 								enachTransactionRequest.getServiceName(), enachTransactionRequest.getStatusId(),
-								enachTransactionRequest.getMerchantId())+"" , data);
+								enachTransactionRequest.getMerchantId(),
+								enachTransactionRequest.getMandateId())+"" , data);
 			}
 
 		} catch (Exception e) {

@@ -1,17 +1,12 @@
 package com.Master_Dashboard.request;
 
-import javax.validation.constraints.NotBlank;
-
 import org.springframework.beans.factory.annotation.Value;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ENachTransactionRequest {
 
-	@NotBlank(message = "start date can not be blank")
 	private String startDate;
 	
-	@NotBlank(message = "end date can not be blank")
 	private String endDate;
 	
 	@Value("10")
@@ -29,6 +24,8 @@ public class ENachTransactionRequest {
 	@JsonIgnore
 	private Long merchantId;
 
+	private String mandateId;
+	
 	public String getStartDate() {
 		return startDate;
 	}
@@ -85,13 +82,25 @@ public class ENachTransactionRequest {
 		this.merchantId = merchantId;
 	}
 
-	
+	public String getMandateId() {
+		return mandateId;
+	}
+
+
+	public void setMandateId(String mandateId) {
+		this.mandateId = mandateId;
+	}
+
+
 	@Override
 	public String toString() {
 		return "ENachTransactionRequest [startDate=" + startDate + ", endDate=" + endDate + ", pageSize=" + pageSize
 				+ ", pageNo=" + pageNo + ", serviceName=" + serviceName + ", statusId=" + statusId + ", merchantId="
-				+ merchantId + "]";
+				+ merchantId + ", mandateId=" + mandateId + "]";
 	}
+
+	
+
 
 	
 	

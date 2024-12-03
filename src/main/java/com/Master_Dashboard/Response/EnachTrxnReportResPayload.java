@@ -20,6 +20,7 @@ public class EnachTrxnReportResPayload {
 	private String debitDate;
 	private String customerBankAccountNumber;
 	private String customerBankIfsc;
+	private String customerMobileNumber;
 
 	public String getsNo() {
 		return sNo;
@@ -165,4 +166,16 @@ public class EnachTrxnReportResPayload {
 		this.isSettled = isSettled;
 	}
 
+	
+	public String getCustomerMobileNumber() {
+		return customerMobileNumber;
+	}
+
+	
+	public void setCustomerMobileNumber(String customerMobileNumber) {
+		this.customerMobileNumber = customerMobileNumber;
+	}
+
+	
+	
 }
