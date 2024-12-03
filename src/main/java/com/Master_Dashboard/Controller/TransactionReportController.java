@@ -1,5 +1,7 @@
 package com.Master_Dashboard.Controller;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
@@ -54,6 +56,7 @@ public class TransactionReportController {
 			enachTransactionRequest.setMerchantId(merchantInfo.getMerchantId());
 			LOGGER.info(enachTransactionRequest.toString());
 			
+			
 			List<EnachTrxnReportResPayload> data = transactionReportService
 					.enachTransactionList(enachTransactionRequest);
 			if (data == null || data.isEmpty()) {
@@ -71,11 +74,15 @@ public class TransactionReportController {
 					endDate=endDate+" 23:59:59";
 				}
 				
+				List<String> serviceNames = (enachTransactionRequest.getServiceName().equalsIgnoreCase("COMPLETE MANDATE"))
+						? Arrays.asList("MANDATE REGISTRATIONS", "MANDATE REGISTRATIONS ESIGN")
+						:  Collections.singletonList(enachTransactionRequest.getServiceName());
+		
 				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_SUCCESS,
 						ResponseMessage.ENACH_TRANSACTION_LIST, 
 						ResponseMessage.SUCCESS,enachTransactionDetailsRepository.findTotalENachTransactionRequest(
 								startDate,endDate,
-								enachTransactionRequest.getServiceName(), enachTransactionRequest.getStatusId(),
+								serviceNames, enachTransactionRequest.getStatusId(),
 								enachTransactionRequest.getMerchantId(),
 								enachTransactionRequest.getMandateId())+"" , data);
 			}

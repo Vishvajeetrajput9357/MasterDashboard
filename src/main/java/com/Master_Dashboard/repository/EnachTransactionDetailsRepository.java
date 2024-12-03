@@ -1,6 +1,8 @@
 package com.Master_Dashboard.repository;
 
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,18 +19,53 @@ public interface EnachTransactionDetailsRepository extends JpaRepository<ENachTr
             "WHERE (:startDate IS NULL OR :endDate IS NULL OR p.transaction_date BETWEEN :startDate AND :endDate) " +
             "  AND (COALESCE(:statusId, '') = '' OR p.transaction_status_id = COALESCE(NULLIF(:statusId, ''), p.transaction_status_id)) " +
             "  AND (COALESCE(:merchantId, '') = '' OR p.merchant_id = COALESCE(NULLIF(:merchantId, ''), p.merchant_id)) " +
-            "  AND (COALESCE(:serviceName, '') = '' OR p.service_name = COALESCE(NULLIF(:serviceName, ''), p.service_name))" + 
-            "  AND (COALESCE(:mandateId, '') = '' OR p.mandate_Id = COALESCE(NULLIF(:mandateId, ''), p.mandate_Id))", 
-    nativeQuery = true)
+            "  AND (COALESCE(:serviceName, '') = '' OR p.service_name IN (:serviceName))" +
+            "  AND (COALESCE(:mandateId, '') = '' OR p.mandate_Id = COALESCE(NULLIF(:mandateId, ''), p.mandate_Id))",
+    nativeQuery = true) 
 	Page<ENachTransactionDetails> findByENachTransactionRequest(
 	    @Param("startDate") String startDate,
 	    @Param("endDate") String endDate,
-	    @Param("serviceName") String serviceName,
+	    @Param("serviceName") List<String> serviceName,
 	    @Param("statusId") Long statusId,
 	    @Param("merchantId") Long merchantId,
 	    @Param("mandateId") String mandateId,
 	    Pageable pageable 
 	);
+//	@Query(value = "SELECT * " +
+//			"FROM enach_transaction_details p " +
+//			"WHERE (:startDate IS NULL OR :endDate IS NULL OR p.transaction_date BETWEEN :startDate AND :endDate) " +
+//			"  AND (COALESCE(:statusId, '') = '' OR p.transaction_status_id = COALESCE(NULLIF(:statusId, ''), p.transaction_status_id)) " +
+//			"  AND (COALESCE(:merchantId, '') = '' OR p.merchant_id = COALESCE(NULLIF(:merchantId, ''), p.merchant_id)) " +
+//			"  AND (COALESCE(:serviceName, '') = '' OR p.service_name = COALESCE(NULLIF(:serviceName, ''), p.service_name))" + 
+//			"  AND (COALESCE(:mandateId, '') = '' OR p.mandate_Id = COALESCE(NULLIF(:mandateId, ''), p.mandate_Id))", 
+//			nativeQuery = true)
+//	Page<ENachTransactionDetails> findByENachTransactionRequest(
+//			@Param("startDate") String startDate,
+//			@Param("endDate") String endDate,
+//			@Param("serviceName") String serviceName,
+//			@Param("statusId") Long statusId,
+//			@Param("merchantId") Long merchantId,
+//			@Param("mandateId") String mandateId,
+//			Pageable pageable 
+//			);
+	
+	
+//	@Query(value = "SELECT count(*) " +
+//            "FROM enach_transaction_details p " +
+//            "WHERE (:startDate IS NULL OR :endDate IS NULL OR p.transaction_date BETWEEN :startDate AND :endDate) " +
+//            "  AND (COALESCE(:statusId, '') = '' OR p.transaction_status_id = COALESCE(NULLIF(:statusId, ''), p.transaction_status_id)) " +
+//            "  AND (COALESCE(:merchantId, '') = '' OR p.merchant_id = COALESCE(NULLIF(:merchantId, ''), p.merchant_id)) " +
+//            "  AND (COALESCE(:serviceName, '') = '' OR p.service_name = COALESCE(NULLIF(:serviceName, ''), p.service_name))" +
+//            "  AND (COALESCE(:mandateId, '') = '' OR p.mandate_Id = COALESCE(NULLIF(:mandateId, ''), p.mandate_Id))",
+//    nativeQuery = true) 
+//	int findTotalENachTransactionRequest(
+//	    @Param("startDate") String startDate,
+//	    @Param("endDate") String endDate,
+//	    @Param("serviceName") String serviceName,
+//	    @Param("statusId") Long statusId,
+//	    @Param("merchantId") Long merchantId,
+//	    @Param("mandateId") String mandateId
+//	);
 	
 	
 	@Query(value = "SELECT count(*) " +
@@ -36,15 +73,23 @@ public interface EnachTransactionDetailsRepository extends JpaRepository<ENachTr
             "WHERE (:startDate IS NULL OR :endDate IS NULL OR p.transaction_date BETWEEN :startDate AND :endDate) " +
             "  AND (COALESCE(:statusId, '') = '' OR p.transaction_status_id = COALESCE(NULLIF(:statusId, ''), p.transaction_status_id)) " +
             "  AND (COALESCE(:merchantId, '') = '' OR p.merchant_id = COALESCE(NULLIF(:merchantId, ''), p.merchant_id)) " +
-            "  AND (COALESCE(:serviceName, '') = '' OR p.service_name = COALESCE(NULLIF(:serviceName, ''), p.service_name))" +
+            "  AND (COALESCE(:serviceName, '') = '' OR p.service_name IN (:serviceName))" +
             "  AND (COALESCE(:mandateId, '') = '' OR p.mandate_Id = COALESCE(NULLIF(:mandateId, ''), p.mandate_Id))",
     nativeQuery = true) 
 	int findTotalENachTransactionRequest(
 	    @Param("startDate") String startDate,
 	    @Param("endDate") String endDate,
-	    @Param("serviceName") String serviceName,
+	    @Param("serviceName") List<String> serviceName,
 	    @Param("statusId") Long statusId,
 	    @Param("merchantId") Long merchantId,
 	    @Param("mandateId") String mandateId
 	);
+	
+	
+	
+	@Query(value = "SELECT * FROM enach_transaction_details WHERE service_name IN (:services)", 
+		       nativeQuery = true)
+		List<ENachTransactionDetails> findByServiceNames(@Param("services") List<String> services);
+
+	
 }

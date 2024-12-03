@@ -1,6 +1,8 @@
 package com.Master_Dashboard.serviceImpl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,6 @@ public class TransactionReportServiceImpl implements TransactionReportService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TransactionReportServiceImpl.class);
 
 	private EnachTransactionDetailsRepository enachTransactionDetailsRepository;
-//	private ModelMapper modelMapper;
 
 	private TransactionReportServiceImpl(
 			EnachTransactionDetailsRepository enachTransactionDetailsRepository/* ,ModelMapper modelMapper */) {
@@ -45,13 +46,22 @@ public class TransactionReportServiceImpl implements TransactionReportService {
 			startDate = startDate + " 00:00:00";
 			endDate = endDate + " 23:59:59";
 		}
+		
+		List<String> serviceNames = (enachTransactionRequest.getServiceName().equalsIgnoreCase("COMPLETE MANDATE"))
+						? Arrays.asList("MANDATE REGISTRATIONS", "MANDATE REGISTRATIONS ESIGN")
+						:  Collections.singletonList(enachTransactionRequest.getServiceName());
+		
+			
+		LOGGER.info("serviceNames2 "+serviceNames);
+		
 		Page<ENachTransactionDetails> result = enachTransactionDetailsRepository.findByENachTransactionRequest(
 				startDate,
-				endDate, enachTransactionRequest.getServiceName(),
+				endDate, serviceNames,
 				enachTransactionRequest.getStatusId(), enachTransactionRequest.getMerchantId(),
 				enachTransactionRequest.getMandateId(), pageable);
 		List<EnachTrxnReportResPayload> payloadList = new ArrayList<>();
 		LOGGER.info("result :  " + result.getSize());
+		
 		int i = 0;
 		for (ENachTransactionDetails eNachTransactionDetails : result.getContent()) {
 			i++;

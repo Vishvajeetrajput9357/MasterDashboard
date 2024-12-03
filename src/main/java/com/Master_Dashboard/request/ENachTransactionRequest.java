@@ -1,5 +1,7 @@
 package com.Master_Dashboard.request;
 
+import javax.validation.constraints.Pattern;
+
 import org.springframework.beans.factory.annotation.Value;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,7 +17,7 @@ public class ENachTransactionRequest {
 	@Value("0")
 	private Integer pageNo;
 	
-	@Value("0")
+	@Pattern(regexp = "COMPLETE MANDATE|MANDATE REGISTRATIONS ESIGN|MANDATE REGISTRATIONS|DEBIT PRESENTATION", message = "Invalid Service Name")
 	private String serviceName;
 
 	@Value("0")
