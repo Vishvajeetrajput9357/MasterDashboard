@@ -28,7 +28,7 @@ import com.Master_Dashboard.service.TransactionReportService;
 public class TransactionReportController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TransactionReportController.class);
-	
+
 	private TransactionReportService transactionReportService;
 	private SetErrorResponses setErrorResponses;
 	private EnachTransactionDetailsRepository enachTransactionDetailsRepository;
@@ -51,45 +51,44 @@ public class TransactionReportController {
 			if (!merchantInfoOpt.isPresent() || !(merchantInfo.getIsMerchantActive().equalsIgnoreCase("Y")
 					&& merchantInfo.getIsMerchantActive().equalsIgnoreCase("Y"))) {
 				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_FAILED, "Failed to fetch data",
-						ResponseMessage.UNAUTHORISED_DESCRIPTION,"NA", null);
+						ResponseMessage.UNAUTHORISED_DESCRIPTION, "NA", null);
 			}
 			enachTransactionRequest.setMerchantId(merchantInfo.getMerchantId());
 			LOGGER.info(enachTransactionRequest.toString());
-			
-			
+
 			List<EnachTrxnReportResPayload> data = transactionReportService
 					.enachTransactionList(enachTransactionRequest);
 			if (data == null || data.isEmpty()) {
 				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_FAILED, "Failed to fetch data",
-						ResponseMessage.FAILED,"NA", null);
+						ResponseMessage.FAILED, "NA", null);
 			} else {
-				String startDate=enachTransactionRequest.getStartDate();
-				String endDate=enachTransactionRequest.getEndDate();
-				
-				if (enachTransactionRequest.getStartDate().equalsIgnoreCase("")|| enachTransactionRequest.getEndDate().equalsIgnoreCase("")) {
-					startDate=null;
-					endDate=null;
-				} else {
-					startDate=startDate+" 00:00:00";
-					endDate=endDate+" 23:59:59";
-				}
-				
-				List<String> serviceNames = (enachTransactionRequest.getServiceName().equalsIgnoreCase("COMPLETE MANDATE"))
-						? Arrays.asList("MANDATE REGISTRATIONS", "MANDATE REGISTRATIONS ESIGN")
-						:  Collections.singletonList(enachTransactionRequest.getServiceName());
-		
-				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_SUCCESS,
-						ResponseMessage.ENACH_TRANSACTION_LIST, 
-						ResponseMessage.SUCCESS,enachTransactionDetailsRepository.findTotalENachTransactionRequest(
-								startDate,endDate,
-								serviceNames, enachTransactionRequest.getStatusId(),
-								enachTransactionRequest.getMerchantId(),
-								enachTransactionRequest.getMandateId())+"" , data);
-			}
+				String startDate = enachTransactionRequest.getStartDate();
+				String endDate = enachTransactionRequest.getEndDate();
 
+				if (enachTransactionRequest.getStartDate().equalsIgnoreCase("")
+						|| enachTransactionRequest.getEndDate().equalsIgnoreCase("")) {
+					startDate = null;
+					endDate = null;
+				} else {
+					startDate = startDate + " 00:00:00";
+					endDate = endDate + " 23:59:59";
+				}
+
+				List<String> serviceNames = (enachTransactionRequest.getServiceName()
+						.equalsIgnoreCase("COMPLETE MANDATE"))
+								? Arrays.asList("MANDATE REGISTRATIONS", "MANDATE REGISTRATIONS ESIGN")
+								: Collections.singletonList(enachTransactionRequest.getServiceName());
+
+				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_SUCCESS,
+						ResponseMessage.ENACH_TRANSACTION_LIST, ResponseMessage.SUCCESS,
+						enachTransactionDetailsRepository.findTotalENachTransactionRequest(startDate, endDate,
+								serviceNames, enachTransactionRequest.getStatusId(),
+								enachTransactionRequest.getMerchantId(), enachTransactionRequest.getMandateId()) + "",data);
+			}
 		} catch (Exception e) {
+			LOGGER.info("Exception : {}",e.getMessage());
 			return new EnachTransactionReport<>(ResponseMessage.API_STATUS_FAILED, "Failed to fetch data",
-					ResponseMessage.SOMETHING_WENT_WRONG,"NA", null);
+					ResponseMessage.SOMETHING_WENT_WRONG, "NA", null);
 		}
 	}
 

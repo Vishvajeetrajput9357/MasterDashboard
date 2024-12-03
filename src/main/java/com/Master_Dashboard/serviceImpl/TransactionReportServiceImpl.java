@@ -87,7 +87,7 @@ public class TransactionReportServiceImpl implements TransactionReportService {
 		payload.setIsSettled(eNachTransactionDetails.getIsSettled());
 		payload.setServiceName(eNachTransactionDetails.getServiceName());
 		payload.setTrxnRefId(eNachTransactionDetails.getMandateId());
-		payload.setMandateId(eNachTransactionDetails.getMerchantId() + "");
+		payload.setMandateId(eNachTransactionDetails.getMandateId());
 		payload.setCustomerName(eNachTransactionDetails.getCustomerName());
 		payload.seteNachUMRN(eNachTransactionDetails.geteNachUMRN());
 		payload.setCharges(eNachTransactionDetails.getMerchantServiceCharge());
