@@ -5,6 +5,6 @@ import com.Master_Dashboard.request.CreateMandateRequest;
 
 public interface CreateNachService {
 
-	Map<String, Object> createNach(CreateMandateRequest createMandateRequest);
+	Map<String, Object> createNach(CreateMandateRequest createMandateRequest , long merchantId);
 
 }

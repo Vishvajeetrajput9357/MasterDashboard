@@ -436,5 +436,29 @@ public class ENachTransactionDetails {
 	public void setDebitDate(String debitDate) {
 		this.debitDate = debitDate;
 	}
+
+
+	@Override
+	public String toString() {
+		return "ENachTransactionDetails [eNachTransactionId=" + eNachTransactionId + ", requestId=" + requestId
+				+ ", responseId=" + responseId + ", customerMobileNumber=" + customerMobileNumber + ", customerEmail="
+				+ customerEmail + ", mandateId=" + mandateId + ", apiStatus=" + apiStatus + ", mandateType="
+				+ mandateType + ", mandateStartDate=" + mandateStartDate + ", mandateEndDate=" + mandateEndDate
+				+ ", customerName=" + customerName + ", customerBankAccountNumber=" + customerBankAccountNumber
+				+ ", customerBankIfsc=" + customerBankIfsc + ", customerBankName=" + customerBankName + ", frequency="
+				+ frequency + ", customerAccountType=" + customerAccountType + ", instrumentType=" + instrumentType
+				+ ", merchantId=" + merchantId + ", merchantServiceId=" + merchantServiceId + ", transactionStatus="
+				+ transactionStatus + ", transactionDate=" + transactionDate + ", transactionUpdateDate="
+				+ transactionUpdateDate + ", merchantTransactionRefId=" + merchantTransactionRefId
+				+ ", transactionAmount=" + transactionAmount + ", eNachId=" + eNachId + ", merchantServiceCharge="
+				+ merchantServiceCharge + ", isReconcile=" + isReconcile + ", isSettled=" + isSettled + ", remark="
+				+ remark + ", serviceName=" + serviceName + ", trxnRefId=" + trxnRefId + ", transactionStatusId="
+				+ transactionStatusId + ", mandateCancellationDate=" + mandateCancellationDate
+				+ ", serviceProviderName=" + serviceProviderName + ", serviceProviderUtilityCode="
+				+ serviceProviderUtilityCode + ", eNachUMRN=" + eNachUMRN + ", categoryCode=" + categoryCode
+				+ ", debitDate=" + debitDate + "]";
+	}
+
+	
 	
 }

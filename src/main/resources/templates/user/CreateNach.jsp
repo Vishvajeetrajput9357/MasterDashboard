@@ -263,7 +263,7 @@
 
             <div class="form-group">
                 <lable style="display: none;"for="Channel">Channel</label>
-                <input hidden  type="text" ID="Channel" name="Channel" th:value="${Debit}">
+                <input hidden  type="text" ID="Channel" name="Channel" th:value="${channel}">
             </div>
 
             <div class="form-group">

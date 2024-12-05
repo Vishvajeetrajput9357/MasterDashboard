@@ -3,16 +3,12 @@ package com.Master_Dashboard.Controller;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
 import javax.validation.Valid;
-
 import com.Master_Dashboard.Encryption.Encryption;
 import com.Master_Dashboard.entity.MerchantInfo;
 import com.Master_Dashboard.ex.util.SetErrorResponses;
 import com.Master_Dashboard.repository.MerchantInfoRepository;
 import com.Master_Dashboard.request.CreateMandateRequest;
-
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.Master_Dashboard.service.CreateNachService;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -53,12 +50,11 @@ public class CreateOrderMandate {
 			if (!merchantInfoOpt.isPresent()) {
 				return setErrorResponses.setUnauthorised(map);
 			}
-			
 			LOGGER.info("createMandate : "+createMandateRequest.toString());
-			return createNachService.createNach(createMandateRequest);
+			return createNachService.createNach(createMandateRequest,merchantInfoOpt.get().getMerchantId());
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error occurred during order creation : ", e);
 			return setErrorResponses.setApiStatusSomethingWent(map);
 		}
 	}

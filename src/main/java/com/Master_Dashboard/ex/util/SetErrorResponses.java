@@ -45,5 +45,11 @@ public class SetErrorResponses {
 		}
 	}
 	
+	public Map<String, Object> setErrorResponseWith(Map<String, Object> response, String code, String description) {
+		response.put(ResponseMessage.CODE, code);
+		response.put(ResponseMessage.DESCRIPTION, description);
+		response.put(ResponseMessage.STATUS, ResponseMessage.API_STATUS_FAILED);
+		return response;
+	}
 	
 }

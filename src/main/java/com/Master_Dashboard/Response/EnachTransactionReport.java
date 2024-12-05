@@ -8,7 +8,6 @@ public class EnachTransactionReport<T> {
 	private String description;
 	private String code;
 	private String totalTransaction;
-
 	private List<T> resPayload;
 
 	

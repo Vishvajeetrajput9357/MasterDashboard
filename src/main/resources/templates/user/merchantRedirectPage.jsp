@@ -41,7 +41,7 @@
 	           <div class="section_wrapper_left">
 		              		 <div style="margin-top: 20px;">
 			                   <h5 style="color: rgb(56, 23, 118); letter-spacing: 1.5px; text-align: center;">
-			                       <span th:utext="${Success}"></span>
+			                       <span th:utext="${message}"></span>
 			                   </h5>
 		                   	  <div>
 	                       <div>Redirecting to the merchant site.. </div>

@@ -2,6 +2,7 @@ package com.Master_Dashboard.repository;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -86,10 +87,6 @@ public interface EnachTransactionDetailsRepository extends JpaRepository<ENachTr
 	);
 	
 	
-	
-	@Query(value = "SELECT * FROM enach_transaction_details WHERE service_name IN (:services)", 
-		       nativeQuery = true)
-		List<ENachTransactionDetails> findByServiceNames(@Param("services") List<String> services);
-
+	Optional<ENachTransactionDetails> findByMerchantTransactionRefId(String merchantTransactionRefId);
 	
 }

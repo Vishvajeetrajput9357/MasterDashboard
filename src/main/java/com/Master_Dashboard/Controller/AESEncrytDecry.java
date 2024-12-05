@@ -4,6 +4,9 @@ package  com.Master_Dashboard.Controller;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.nio.charset.StandardCharsets;
 
 public class AESEncrytDecry {
 
@@ -68,12 +71,37 @@ public class AESEncrytDecry {
         }
         return bytes;
     }
-        
+     
+    
+    public static String checkSum(String input) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] encodedHash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+            
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : encodedHash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error generating SHA-256 hash", e);
+        }
+    }
+    
+    
     public static void main(String[] args) {
     	
     	String h="7649855283";
         String encrypted = AESEncrytDecry.Encrypt(h);
         System.out.println("Encrypted: " + encrypted);
+        
+        String hash="50100000835738|2024-12-31|2025-10-31|100.00|";
+        System.out.println("Hash:  "+AESEncrytDecry.checkSum(hash));
         
         String decrypted = AESEncrytDecry.DecryptAES("\\x255f1883ff812a8603d39695f1cd9592");
         System.out.println("Decrypted: " + decrypted);
