@@ -22,6 +22,7 @@ import com.Master_Dashboard.repository.EnachTransactionDetailsRepository;
 @Controller
 @RequestMapping("/nachRedirect")
 public class PaymentLinkController {
+	
 
 	private CoreTempRepository coreTempRepository;
 	private EnachTransactionDetailsRepository eNachTransactionDetailsRepository;
@@ -98,12 +99,12 @@ public class PaymentLinkController {
 	@RequestMapping(value = "/createMandate/{merchantTransactionRefId}", method = RequestMethod.GET)
 	public ModelAndView createMandate(@PathVariable String merchantTransactionRefId) {
 
-		LOGGER.info("Inside genrate Madate form...");
+		LOGGER.info("Inside genrate Madate form..."+merchantTransactionRefId);
 
 		ModelAndView model = new ModelAndView();
 		try {
 			Optional<ENachTransactionDetails> eNachTransactionDetails = eNachTransactionDetailsRepository
-					.findByMerchantTransactionRefId(Encryption.encString(null));
+					.findByMerchantTransactionRefId(Encryption.encString(merchantTransactionRefId));
 
 			if (!eNachTransactionDetails.isPresent()) {
 				model.addObject("message", "Invalid token!!");
@@ -147,4 +148,5 @@ public class PaymentLinkController {
 		}
 		return model;
 	}
+
 }

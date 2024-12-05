@@ -89,12 +89,6 @@ public class CreateNachServiceImpl implements CreateNachService {
 			return setErrorResponses.setErrorResponseWith(map, ResponseMessage.SOMETHING_WENT_WRONG, ResponseMessage.SOMETHING_WENT_WRONG_DESCRIPTION);
 		}
 		
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		map.put(ResponseMessage.STATUS, ResponseMessage.STATUS_SUCCESS);
-//		map.put(ResponseMessage.CODE, ResponseMessage.SUCCESS);
-//		map.put(ResponseMessage.DESCRIPTION, ResponseMessage.MANDATE_URL_SUCCESS);
-//		map.put("url", "https://empirical-tootsie-//-6c9fa64e.koyeb.app/dashboard/nachRedirect/createMandate");
-//		return map;
 	}
 
 	public boolean checkStartDateAndEndDate(String startCollectionDate, String lastCollectionDate) {

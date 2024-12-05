@@ -45,10 +45,11 @@ public class CreateMandateRequest {
 
 	@NotBlank(message = "mandateDebitFrequency cannot be blank")
 	@Size(min = 1, max = 10, message = "mandateDebitFrequency size must be between 1 and 10 characters")
-	@Pattern(regexp = "Weekly|Monthly|Quarterly|Yearly|Adhoc", message = "Please Pass Weekly,Monthly,Quarterly,Yearly or Adhoc on frequency parameter")
+	@Pattern(regexp = "ADHO|INDA|DAIL|WEEK|MNTH|QURT|MIAN|YEAR|BIMN", message = "mandateDebitFrequency")
 	private String mandateDebitFrequency;
 
 	@NotBlank(message = "debitType cannot be blank")
+	@Pattern(regexp = "RCUR|OOFF", message = "Invalid debitType")
 	@Size(min = 1, max = 20, message = "debitType size must be between 1 and 20 characters")
 	private String debitType;
 
@@ -57,11 +58,13 @@ public class CreateMandateRequest {
 	private String customerbankIFSC;
 
 	@NotBlank(message = "authType cannot be blank")
+	@Pattern(regexp = "Debit|Net|Aadhaar", message = "Invalid authType")
 	@Size(min = 1, max = 20, message = "authType size must be between 1 and 20 characters")
 	private String authType;
 
 	@NotBlank(message = "bankAccountType cannot be blank")
 	@Size(min = 1, max = 20, message = "bankAccountType size must be between 1 and 20 characters")
+	@Pattern(regexp = "S|C|O", message = "Invalid bankAccountType")
 	private String bankAccountType;
 
 	@NotBlank(message = "bankName cannot be blank")
