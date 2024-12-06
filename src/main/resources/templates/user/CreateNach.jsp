@@ -142,12 +142,12 @@
             <div class="form-group">
                 <lable style="display: none;"for="UtilCode">UtilCode</label>
                 <input hidden  type="text" ID="UtilCode" name="UtilCode"
-                    value="\xf1f00613b15782a7acd5e9530c42cc753850a659882b3dc9668c48ddb4e4c531">
+                    th:value="${utillyCode}">
             </div>
 
             <div class="form-group">
                 <lable style="display: none;"for="Short_Code">Short Code</label>
-                <input hidden  type="text" ID="Short_Code" name="Short_Code" value="\x255f1883ff812a8603d39695f1cd9592">
+                <input hidden  type="text" ID="Short_Code" name="Short_Code" th:value="${shortCode}">
             </div>
             
             <div class="form-group">
@@ -158,7 +158,7 @@
 
             <div class="form-group">
                 <lable style="display: none;"for="Short_Code">Merchant Category_Code</label>
-                <input hidden  type="text" ID="Merchant_Category_Code" name="Merchant_Category_Code" value="U099">
+                <input hidden  type="text" ID="Merchant_Category_Code" name="Merchant_Category_Code" th:value="${merchantCategoryCode}">
             </div>
             <div class="form-group">
                 <lable style="display: none;"for="Short_Code">Merchant_Category_Desc</label>
@@ -178,7 +178,7 @@
             <div class="form-group">
                 <lable style="display: none;"for="CheckSum">CheckSum</label>
                 <input hidden  type="text" ID="CheckSum" name="CheckSum"
-                    value="2c30633671720cabb04ec4248188ba9efa1dfa3e5a234f199c13a8968da5049f">
+                    th:value="${checkSum}">
             </div>
 
             <div class="form-group">
@@ -189,7 +189,7 @@
             <div class="form-group">
                 <lable style="display: none;"for="Customer_Name">Customer Name</label>
                 <input hidden  type="text" ID="Customer_Name" name="Customer_Name"
-                    value="\xbe8e925d737b597e01335f2ca61f442e077aee20f1df4454e61dfa53b1484632">
+                    th:value="${customerName}">
             </div>
             <div class="form-group">
                 <lable style="display: none;"for="Customer_TelphoneNo">Customer_TelphoneNo</label>
@@ -199,7 +199,7 @@
             <div class="form-group">
                 <lable style="display: none;"for="Customer_Mobile">Customer Mobile</label>
                 <input hidden  type="text" ID="Customer_Mobile" name="Customer_Mobile"
-                    value="\x5f493e434bcef0d333d9476079525641">
+                    th:value="${customerMobile}">
             </div>
 
             <div class="form-group">
@@ -210,24 +210,23 @@
             <div class="form-group">
                 <lable style="display: none;"for="Customer_AccountNo">Customer Account No</label>
                 <input hidden  type="text" ID="Customer_AccountNo" name="Customer_AccountNo"
-                    value="\x4ba067c9b15f6edaf92d5e8bf0a72364">
+                    th:value="${customerAccountNo}">
             </div>
 
             <div class="form-group">
                 <lable style="display: none;"for="Customer_StartDate">Customer Start Date</label>
-                <input hidden  type="text" ID="Customer_StartDate" name="Customer_StartDate" value="2024-12-31">
+                <input hidden  type="text" ID="Customer_StartDate" name="Customer_StartDate" th:value="${customerStartDate}">
             </div>
 
             <div class="form-group">
                 <lable style="display: none;"for="Customer_ExpiryDate">Customer Expiry Date</label>
-                <input hidden  type="text" ID="Customer_ExpiryDate" name="Customer_ExpiryDate" value="2025-10-31">
+                <input hidden  type="text" ID="Customer_ExpiryDate" name="Customer_ExpiryDate" th:value="${customerExpiryDate}">
             </div>
 
             <div class="form-group">
                 <lable style="display: none;"for="Customer_DebitAmount">Customer Debit Amount</label>
-                <input hidden  type="text" ID="Customer_DebitAmount" name="Customer_DebitAmount" value="100.00">
+                <input hidden  type="text" ID="Customer_DebitAmount" name="Customer_DebitAmount" th:value="${customerDebitAmount}">
             </div>
-
 
             <div class="form-group">
                 <lable style="display: none;"for="Customer_MaxAmount">Customer_MaxAmount</label>
@@ -236,18 +235,18 @@
 
             <div class="form-group">
                 <lable style="display: none;"for="Channel">Customer_DebitFrequency</label>
-                <input hidden  type="text" ID="Customer_DebitFrequency" name="Customer_DebitFrequency" value="MNTH">
+                <input hidden  type="text" ID="Customer_DebitFrequency" name="Customer_DebitFrequency" th:value="${customerDebitFrequency}">
             </div>
 
             <div class="form-group">
                 <lable style="display: none;"for="Channel">Customer_SequenceType</label>
-                <input hidden  type="text" ID="Customer_SequenceType" name="Customer_SequenceType" value="RCUR">
+                <input hidden  type="text" ID="Customer_SequenceType" name="Customer_SequenceType" th:value="${customerSequenceType}">
             </div>
 
             <div class="form-group">
                 <lable style="display: none;"for="Customer_InstructedMemberId">Customer Instructed Member Id</label>
                 <input hidden  type="text" ID="Customer_InstructedMemberId" name="Customer_InstructedMemberId"
-                    value="HDFC0003354">
+                    th:value="${customerInstructedMemberId}">
             </div>
 
             <div class="form-group">
@@ -291,12 +290,12 @@
 
             <div class="form-group">
                 <lable style="display: none;"for="Channel">Filler5</label>
-                <input hidden  type="text" ID="Filler5" name="Filler5" value="S">
+                <input hidden  type="text" ID="Filler5" name="Filler5" th:value="${filler5}">
             </div>
 
             <div class="form-group">
                 <lable style="display: none;"for="Channel">Filler6</label>
-                <input hidden  type="text" ID="Filler6" name="Filler6" value="HDFC">
+                <input hidden  type="text" ID="Filler6" name="Filler6" th:value="${filler6}">
             </div>
 
             <div class="form-group">

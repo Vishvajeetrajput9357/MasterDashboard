@@ -10,8 +10,8 @@ public class GenrateUniqueId {
 	    	System.out.println(currentTimeMillis);
 	        String uuid = UUID.randomUUID().toString().replace("-", "").substring(0, 15); // Get a substring of length 15
 	        String uniqueId = currentTimeMillis + uuid;
-	        if (uniqueId.length() > 20) {
-	            uniqueId = uniqueId.substring(0, 20);
+	        if (uniqueId.length() > 15) {
+	            uniqueId = uniqueId.substring(0, 15);
 	        }
 	        return "KJ"+uniqueId.toUpperCase();
 	    }

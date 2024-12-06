@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.Map;
 import java.util.Optional;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,32 +17,34 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URLDecoder;
 import com.Master_Dashboard.Encryption.Encryption;
 import com.Master_Dashboard.entity.CoreTempTrxn;
+import com.Master_Dashboard.entity.ENachResponse;
 import com.Master_Dashboard.entity.ENachTransactionDetails;
 import com.Master_Dashboard.repository.CoreTempRepository;
+import com.Master_Dashboard.repository.ENachResponseRepository;
 import com.Master_Dashboard.repository.EnachTransactionDetailsRepository;
 
 @Controller
 @RequestMapping("/nachRedirect")
 public class PaymentLinkController {
-	
 
 	private CoreTempRepository coreTempRepository;
+	private ENachResponseRepository eNachResponseRepository;
 	private EnachTransactionDetailsRepository eNachTransactionDetailsRepository;
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PaymentLinkController.class);
 
 	private final static String UtilCode = "\\xf1f00613b15782a7acd5e9530c42cc753850a659882b3dc9668c48ddb4e4c531";
 	private final static String Short_Code = "\\x255f1883ff812a8603d39695f1cd9592";
 
-	
 	public PaymentLinkController(CoreTempRepository coreTempRepository,
-			EnachTransactionDetailsRepository eNachTransactionDetailsRepository) {
+			EnachTransactionDetailsRepository eNachTransactionDetailsRepository, ENachResponseRepository eNachResponseRepository) {
 		this.coreTempRepository = coreTempRepository;
 		this.eNachTransactionDetailsRepository = eNachTransactionDetailsRepository;
+		this.eNachResponseRepository = eNachResponseRepository;
 	}
 
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/paymentLink", method = RequestMethod.POST)
-	public ModelAndView paymentLink(@RequestBody String reqbody) {
+	public synchronized ModelAndView paymentLink(@RequestBody String reqbody) {
 
 		LOGGER.info(reqbody);
 		ModelAndView model = new ModelAndView();
@@ -74,9 +78,81 @@ public class PaymentLinkController {
 					coreTempTrxn.setRetryCount("Na");
 					coreTempTrxn.setTransactionId("NA");
 					coreTempRepository.save(coreTempTrxn);
+					
+					try {
+						JSONObject jsonObject = new JSONObject(response);
+						String merchantTrxnRefId=jsonObject.getString("MsgId");
+						
+						Optional<ENachTransactionDetails> eNachTransactionDetails=
+								eNachTransactionDetailsRepository.findByMerchantTransactionRefId(Encryption.encString(merchantTrxnRefId));
+						
+						if (!eNachTransactionDetails.isPresent()) {
+							model.addObject("message", "Failed To Fetch Data..");
+							return model;
+						}
+						String umrn="";	
+						String mandateStatus="";
+						String mandateMessage="";
+						String transactionUpdateDate="";
+						String mandateId="";
+						long statusId=0;
+						
+				        JSONArray errorsArray = jsonObject.getJSONArray("Errors");
+				        String errorMessage = errorsArray.getJSONObject(0).getString("Error_Message");
+
+						ENachResponse eNachResponse = new ENachResponse();
+						eNachResponse.setResponseDate(trxnDate1);
+						eNachResponse.setApiResponse(response);
+						eNachResponse.setMerchantTransactionRefId(merchantTrxnRefId);
+						eNachResponse.setMerchantId(eNachTransactionDetails.get().getMerchantId());
+					
+						eNachResponse.setTrxnDate(trxnDate1+"");
+						if (jsonObject.getString("Status").equalsIgnoreCase("Failed")) {
+							statusId=2;
+							umrn="NA";
+							mandateStatus="FAILED";
+							mandateMessage=errorMessage+".";
+							eNachResponse.setUmrn("NA");
+							eNachResponse.setMandateId(jsonObject.getString("RefId"));
+							mandateId=jsonObject.getString("RefId");
+							transactionUpdateDate=trxnDate1+"";
+						}else if(jsonObject.getString("Status").equalsIgnoreCase("Success")) {
+							statusId=1;
+							umrn=jsonObject.getString("Filler10");
+							mandateId=jsonObject.getString("Filler9");
+							mandateStatus="SUCCESS";
+							mandateMessage="Mandate has been successfully registered.";
+							transactionUpdateDate=trxnDate1+"";
+							eNachResponse.setUmrn(umrn);
+							eNachResponse.setMandateId(jsonObject.getString("Filler9"));
+						}else {
+							statusId=3;
+							umrn="NA";
+							mandateId="NA";
+							mandateStatus="PENDING";
+							mandateMessage=""+errorMessage;
+							transactionUpdateDate=trxnDate1+"";
+							eNachResponse.setUmrn("NA");
+							eNachResponse.setMandateId("NA");
+						}
+						eNachResponseRepository.save(eNachResponse);
+						
+						ENachTransactionDetails eNachTransactionDetail =eNachTransactionDetails.get();
+						eNachTransactionDetail.seteNachUMRN(Encryption.encString(umrn));
+						eNachTransactionDetail.setRemark(Encryption.encString(mandateMessage));
+						eNachTransactionDetail.setTransactionUpdateDate(transactionUpdateDate);
+						eNachTransactionDetail.setResponseId(eNachResponse.getResponsetId());
+						eNachTransactionDetail.setMandateId(Encryption.encString(mandateId));
+						eNachTransactionDetail.setTransactionStatus(mandateStatus);
+						eNachTransactionDetail.setApiStatus(mandateStatus);
+						eNachTransactionDetail.setTransactionStatusId(statusId);
+						eNachTransactionDetailsRepository.save(eNachTransactionDetail);
+						
+					}catch(org.springframework.boot.json.JsonParseException ex) {
+					}
+					
 
 				} else {
-					// Print non-JSON key-value pairs
 					LOGGER.info(key + ": " + value);
 				}
 			}
@@ -99,8 +175,6 @@ public class PaymentLinkController {
 	@RequestMapping(value = "/createMandate/{merchantTransactionRefId}", method = RequestMethod.GET)
 	public ModelAndView createMandate(@PathVariable String merchantTransactionRefId) {
 
-		LOGGER.info("Inside genrate Madate form..."+merchantTransactionRefId);
-
 		ModelAndView model = new ModelAndView();
 		try {
 			Optional<ENachTransactionDetails> eNachTransactionDetails = eNachTransactionDetailsRepository
@@ -111,35 +185,50 @@ public class PaymentLinkController {
 				model.setViewName("user/merchantRedirectPage");
 				return model;
 			}
-			ENachTransactionDetails eNachTransactionDetail=eNachTransactionDetails.get();
-			LOGGER.info("merchantTransactionRefId : {}", merchantTransactionRefId);
+			ENachTransactionDetails eNachTransactionDetail = eNachTransactionDetails.get();
 
-			String authType="NET";
-			
-	        String hash=Encryption.decString(eNachTransactionDetail.getCustomerBankAccountNumber())+
-	        		"|"+eNachTransactionDetail.getMandateStartDate()+"|"+eNachTransactionDetail.getMandateEndDate()+"|"+
-	        		eNachTransactionDetail.getTransactionAmount()+"|";
+			LOGGER.info("amount : {}", eNachTransactionDetail.getTransactionAmount());
 
-			model.addObject("merchantCategoryCode", "U009");
+			double transactionAmount = eNachTransactionDetail.getTransactionAmount();
+			String formattedAmount = String.format("%.2f", transactionAmount);
+			LOGGER.info("amount : {}", formattedAmount);
+			LOGGER.info("amount : {}", Double.parseDouble(formattedAmount));
+
+			String hashString = Encryption.decString(eNachTransactionDetail.getCustomerBankAccountNumber()) + "|"
+					+ eNachTransactionDetail.getMandateStartDate() + "|" + eNachTransactionDetail.getMandateEndDate()
+					+ "|" + formattedAmount + "|";
+
+			LOGGER.info("hashString : {}", hashString);
+
+			String hash = AESEncrytDecry.checkSum(hashString);
+
+			System.out.println(hash);
+//	        2c30633671720cabb04ec4248188ba9efa1dfa3e5a234f199c13a8968da5049f
+//	        2ae0598c59f0ab804652bd027cce6a1ff4012a7da4df0bddbe9b80899c11d528
+			model.addObject("merchantCategoryCode", "U099");
 			model.addObject("utillyCode", UtilCode);
 			model.addObject("shortCode", Short_Code);
-			model.addObject("checkSum", AESEncrytDecry.checkSum(hash));
+			model.addObject("checkSum", hash);
 			model.addObject("messageId", merchantTransactionRefId);
-			model.addObject("customerName", Encryption.decString(eNachTransactionDetail.getCustomerName()));
-			model.addObject("customerMobile", Encryption.decString(eNachTransactionDetail.getCustomerMobileNumber()));
-			model.addObject("customerAccountNo", Encryption.decString(eNachTransactionDetail.getCustomerBankAccountNumber()));
+			model.addObject("customerName",
+					AESEncrytDecry.Encrypt(Encryption.decString(eNachTransactionDetail.getCustomerName())));
+			model.addObject("customerMobile",
+					AESEncrytDecry.Encrypt(Encryption.decString(eNachTransactionDetail.getCustomerMobileNumber())));
+			model.addObject("customerAccountNo", AESEncrytDecry
+					.Encrypt(Encryption.decString(eNachTransactionDetail.getCustomerBankAccountNumber())));
 			model.addObject("customerStartDate", eNachTransactionDetail.getMandateStartDate());
 			model.addObject("customerExpiryDate", eNachTransactionDetail.getMandateEndDate());
-			model.addObject("customerDebitAmount", eNachTransactionDetail.getTransactionAmount());
+			model.addObject("customerDebitAmount", formattedAmount);
 			model.addObject("customerMaxAmount", "");
 			model.addObject("customerDebitFrequency", Encryption.decString(eNachTransactionDetail.getFrequency()));
-			model.addObject("customerSequenceType", Encryption.decString(eNachTransactionDetail.getMandateType()));
-			model.addObject("customerInstructedMemberId", Encryption.decString(eNachTransactionDetail.getCustomerBankIfsc()));
-			model.addObject("channel", authType);
+			model.addObject("customerSequenceType", Encryption.decString(eNachTransactionDetail.getCategoryCode()));
+			model.addObject("customerInstructedMemberId",
+					Encryption.decString(eNachTransactionDetail.getCustomerBankIfsc()));
+			model.addObject("channel", Encryption.decString(eNachTransactionDetail.getMandateType()));
 			model.addObject("filler5", Encryption.decString(eNachTransactionDetail.getCustomerAccountType()));
 			model.addObject("filler6", Encryption.decString(eNachTransactionDetail.getCustomerBankName()));
 			model.setViewName("user/CreateNach");
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addObject("message", "Something went wrong!!");

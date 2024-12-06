@@ -6,7 +6,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.nio.charset.StandardCharsets;
 
 public class AESEncrytDecry {
 
@@ -35,12 +34,8 @@ public class AESEncrytDecry {
 
     public static String Encrypt(String plainText) {
         if (plainText == null || plainText.isEmpty()) {
-        	
-        	System.out.println("null");
             return plainText;
         }
-//    	System.out.println(plainText);
-
 
         byte[] key = key_Val.getBytes(StandardCharsets.UTF_8);
         try {

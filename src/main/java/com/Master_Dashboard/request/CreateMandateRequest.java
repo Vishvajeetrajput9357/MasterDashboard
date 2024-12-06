@@ -58,7 +58,7 @@ public class CreateMandateRequest {
 	private String customerbankIFSC;
 
 	@NotBlank(message = "authType cannot be blank")
-	@Pattern(regexp = "Debit|Net|Aadhaar", message = "Invalid authType")
+	@Pattern(regexp = "Debit|NET|Aadhaar", message = "Invalid authType")
 	@Size(min = 1, max = 20, message = "authType size must be between 1 and 20 characters")
 	private String authType;
 

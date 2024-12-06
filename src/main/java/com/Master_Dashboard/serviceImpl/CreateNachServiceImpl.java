@@ -52,13 +52,20 @@ public class CreateNachServiceImpl implements CreateNachService {
 			}
 
 			double transactionAmount = Double.valueOf(createMandateRequest.getMandateDebitAmount());
-			String merchantTransactionRefId = GenrateUniqueId.generateUniqueId();
+			String merchantTransactionRefId = GenrateUniqueId.generateUniqueId()+"T"+merchantId;
 			String apiRequest = "NA";
 			long merchantServiceId = 0;
 			String transactionStatus = "PENDING";
 			double merchantServiceCharge = 0.0;
 			long transactionStatusId = 3;
-			String serviceName = "MANDATE REGISTRATION";
+			
+			String serviceName ="";
+			if(createMandateRequest.getAuthType().equalsIgnoreCase("Debit")||createMandateRequest.getAuthType().equalsIgnoreCase("NET")) {
+				serviceName= "MANDATE REGISTRATIONS";
+			}else {
+				serviceName= "MANDATE REGISTRATIONS ESIGN";
+			}
+			
 			String mandateId = "NA";
 
 			long requestId = eNachRequestService.saveENachRequest(createMandateRequest.getCustomerMobile(),
@@ -77,11 +84,11 @@ public class CreateNachServiceImpl implements CreateNachService {
 					merchantId, merchantServiceId, transactionStatus, merchantTransactionRefId, transactionAmount, "NA",
 					merchantServiceCharge, 'N', 'N', "NA", serviceName, "NA", transactionStatusId, "HDFC", "NA", "NA",
 					createMandateRequest.getDebitType(), "NA");
-
+			
 			map.put(ResponseMessage.STATUS, ResponseMessage.STATUS_SUCCESS);
 			map.put(ResponseMessage.CODE, ResponseMessage.SUCCESS);
 			map.put(ResponseMessage.DESCRIPTION, ResponseMessage.MANDATE_URL_SUCCESS);
-//			map.put("url", "https://empirical-tootsie-kjsstpay-6c9fa64e.koyeb.app/dashboard/nachRedirect/createMandate");
+//			map.put("url", "https://empirical-tootsie--6c9fa64e.koyeb.app/dashboard/nachRedirect/createMandate");
 			map.put("url", "http://localhost:8090/dashboard/nachRedirect/createMandate/"+merchantTransactionRefId);
 			return map;
 

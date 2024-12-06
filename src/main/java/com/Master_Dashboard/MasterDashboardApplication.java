@@ -10,9 +10,9 @@ import com.Master_Dashboard.Encryption.Encryption;
 @EnableJpaRepositories("com.Master_Dashboard.repository")
 public class MasterDashboardApplication {
 	
+	
 	public static void main(String[] args) {
 		
-		System.out.println(Encryption.decString("S7V+cBZ9/B2ERhlIzUU/kg=="));
 		SpringApplication.run(MasterDashboardApplication.class, args);
 	}
 

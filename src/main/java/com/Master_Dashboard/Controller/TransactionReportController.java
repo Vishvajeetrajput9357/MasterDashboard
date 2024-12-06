@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.Master_Dashboard.Encryption.Encryption;
 import com.Master_Dashboard.Response.EnachTransactionReport;
 import com.Master_Dashboard.Response.EnachTrxnReportResPayload;
 import com.Master_Dashboard.entity.MerchantInfo;
@@ -76,14 +78,14 @@ public class TransactionReportController {
 
 				List<String> serviceNames = (enachTransactionRequest.getServiceName()
 						.equalsIgnoreCase("COMPLETE MANDATE"))
-								? Arrays.asList("MANDATE REGISTRATIONS", "MANDATE REGISTRATIONS ESIGN")
-								: Collections.singletonList(enachTransactionRequest.getServiceName());
+						? Arrays.asList(Encryption.encString("MANDATE REGISTRATIONS"), Encryption.encString("MANDATE REGISTRATIONS ESIGN"))
+								:  Collections.singletonList(Encryption.encString(enachTransactionRequest.getServiceName()));
 
 				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_SUCCESS,
 						ResponseMessage.ENACH_TRANSACTION_LIST, ResponseMessage.SUCCESS,
 						enachTransactionDetailsRepository.findTotalENachTransactionRequest(startDate, endDate,
 								serviceNames, enachTransactionRequest.getStatusId(),
-								enachTransactionRequest.getMerchantId(), enachTransactionRequest.getMandateId()) + "",data);
+								enachTransactionRequest.getMerchantId(), Encryption.encString(enachTransactionRequest.getMandateId())) + "",data);
 			}
 		} catch (Exception e) {
 			LOGGER.info("Exception : {}",e.getMessage());

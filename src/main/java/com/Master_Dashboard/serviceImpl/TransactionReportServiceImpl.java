@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+
+import com.Master_Dashboard.Encryption.Encryption;
 import com.Master_Dashboard.Response.EnachTrxnReportResPayload;
 import com.Master_Dashboard.entity.ENachTransactionDetails;
 import com.Master_Dashboard.repository.EnachTransactionDetailsRepository;
@@ -46,19 +48,19 @@ public class TransactionReportServiceImpl implements TransactionReportService {
 			startDate = startDate + " 00:00:00";
 			endDate = endDate + " 23:59:59";
 		}
-		
+		LOGGER.info("serviceNames "+enachTransactionRequest.getServiceName());
+
 		List<String> serviceNames = (enachTransactionRequest.getServiceName().equalsIgnoreCase("COMPLETE MANDATE"))
-						? Arrays.asList("MANDATE REGISTRATIONS", "MANDATE REGISTRATIONS ESIGN")
-						:  Collections.singletonList(enachTransactionRequest.getServiceName());
-		
+						? Arrays.asList(Encryption.encString("MANDATE REGISTRATIONS"), Encryption.encString("MANDATE REGISTRATIONS ESIGN"))
+						:  Collections.singletonList(Encryption.encString(enachTransactionRequest.getServiceName()));
 			
-		LOGGER.info("serviceNames2 "+serviceNames);
+		LOGGER.info("serviceNames "+serviceNames);
 		
 		Page<ENachTransactionDetails> result = enachTransactionDetailsRepository.findByENachTransactionRequest(
 				startDate,
 				endDate, serviceNames,
 				enachTransactionRequest.getStatusId(), enachTransactionRequest.getMerchantId(),
-				enachTransactionRequest.getMandateId(), pageable);
+				Encryption.encString(enachTransactionRequest.getMandateId()), pageable);
 		List<EnachTrxnReportResPayload> payloadList = new ArrayList<>();
 		LOGGER.info("result :  " + result.getSize());
 		
@@ -77,24 +79,24 @@ public class TransactionReportServiceImpl implements TransactionReportService {
 
 		EnachTrxnReportResPayload payload = new EnachTrxnReportResPayload();
 		payload.setsNo(Number);
-		payload.setCustomerMobileNumber(eNachTransactionDetails.getCustomerMobileNumber());
+		payload.setCustomerMobileNumber(Encryption.decString(eNachTransactionDetails.getCustomerMobileNumber()));
 		payload.seteNachTransactionId(eNachTransactionDetails.geteNachTransactionId());
 		payload.setTransactionStatus(eNachTransactionDetails.getTransactionStatus());
 		payload.setTransactionDate(eNachTransactionDetails.getTransactionDate() + "");
-		payload.setMerchantTransactionRefId(eNachTransactionDetails.getMerchantTransactionRefId());
+		payload.setMerchantTransactionRefId(Encryption.decString(eNachTransactionDetails.getMerchantTransactionRefId()));
 		payload.setTransactionAmount(eNachTransactionDetails.getTransactionAmount() + "");
 		payload.setIsReconcile(eNachTransactionDetails.getIsReconcile());
 		payload.setIsSettled(eNachTransactionDetails.getIsSettled());
-		payload.setServiceName(eNachTransactionDetails.getServiceName());
-		payload.setTrxnRefId(eNachTransactionDetails.getMandateId());
-		payload.setMandateId(eNachTransactionDetails.getMandateId());
-		payload.setCustomerName(eNachTransactionDetails.getCustomerName());
-		payload.seteNachUMRN(eNachTransactionDetails.geteNachUMRN());
+		payload.setServiceName(Encryption.decString(eNachTransactionDetails.getServiceName()));
+		payload.setTrxnRefId(Encryption.decString(eNachTransactionDetails.getMandateId()));
+		payload.setMandateId(Encryption.decString(eNachTransactionDetails.getMandateId()));
+		payload.setCustomerName(Encryption.decString(eNachTransactionDetails.getCustomerName()));
+		payload.seteNachUMRN(Encryption.decString(eNachTransactionDetails.geteNachUMRN()));
 		payload.setCharges(eNachTransactionDetails.getMerchantServiceCharge());
-		payload.setRemark(eNachTransactionDetails.getRemark());
+		payload.setRemark(Encryption.decString(eNachTransactionDetails.getRemark()));
 		payload.setDebitDate(eNachTransactionDetails.getDebitDate());
-		payload.setCustomerBankAccountNumber(eNachTransactionDetails.getCustomerBankAccountNumber());
-		payload.setCustomerBankIfsc(eNachTransactionDetails.getCustomerBankIfsc());
+		payload.setCustomerBankAccountNumber(Encryption.decString(eNachTransactionDetails.getCustomerBankAccountNumber()));
+		payload.setCustomerBankIfsc(Encryption.decString(eNachTransactionDetails.getCustomerBankIfsc()));
 		return payload;
 	}
 }
