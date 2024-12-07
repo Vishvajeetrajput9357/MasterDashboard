@@ -56,7 +56,7 @@
 <script>
 	
 	setTimeout(function() {
-	    window.location.href = "http://localhost:5173/";
+	    window.location.href = "https://hemendra-rajput.dixzdxouk0355.amplifyapp.com/";
 	}, 1000); // Delay in milliseconds (5000ms = 5 seconds)
 
 	
