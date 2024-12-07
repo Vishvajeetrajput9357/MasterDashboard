@@ -53,7 +53,7 @@ public class TransactionReportController {
 			if (!merchantInfoOpt.isPresent() || !(merchantInfo.getIsMerchantActive().equalsIgnoreCase("Y")
 					&& merchantInfo.getIsMerchantActive().equalsIgnoreCase("Y"))) {
 				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_FAILED, "Failed to fetch data",
-						ResponseMessage.UNAUTHORISED_DESCRIPTION, "NA", null);
+						ResponseMessage.UNAUTHORISED_DESCRIPTION, "NA","0","0","0", null);
 			}
 			enachTransactionRequest.setMerchantId(merchantInfo.getMerchantId());
 			LOGGER.info(enachTransactionRequest.toString());
@@ -62,7 +62,7 @@ public class TransactionReportController {
 					.enachTransactionList(enachTransactionRequest);
 			if (data == null || data.isEmpty()) {
 				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_FAILED, "Failed to fetch data",
-						ResponseMessage.FAILED, "NA", null);
+						ResponseMessage.FAILED, "NA", "0","0","0",null);
 			} else {
 				String startDate = enachTransactionRequest.getStartDate();
 				String endDate = enachTransactionRequest.getEndDate();
@@ -81,17 +81,27 @@ public class TransactionReportController {
 						? Arrays.asList(Encryption.encString("MANDATE REGISTRATIONS"), Encryption.encString("MANDATE REGISTRATIONS ESIGN"))
 								:  Collections.singletonList(Encryption.encString(enachTransactionRequest.getServiceName()));
 				String mandateId=(enachTransactionRequest.getMandateId().equalsIgnoreCase(""))?"":Encryption.encString(enachTransactionRequest.getMandateId());
-
+				
+				 int totalFailedTransaction=enachTransactionDetailsRepository.findTotalENachTransactionRequest(startDate, endDate,
+							serviceNames, 2L,
+							enachTransactionRequest.getMerchantId(), mandateId);
+				int totalSuccessTransaction=enachTransactionDetailsRepository.findTotalENachTransactionRequest(startDate, endDate,
+						serviceNames, 1L,
+						enachTransactionRequest.getMerchantId(), mandateId);
+				int totalPendingTransaction=enachTransactionDetailsRepository.findTotalENachTransactionRequest(startDate, endDate,
+						serviceNames, 3L,
+						enachTransactionRequest.getMerchantId(), mandateId);
+				
 				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_SUCCESS,
 						ResponseMessage.ENACH_TRANSACTION_LIST, ResponseMessage.SUCCESS,
 						enachTransactionDetailsRepository.findTotalENachTransactionRequest(startDate, endDate,
 								serviceNames, enachTransactionRequest.getStatusId(),
-								enachTransactionRequest.getMerchantId(), mandateId) + "",data);
+								enachTransactionRequest.getMerchantId(), mandateId) + "",totalFailedTransaction+"",totalSuccessTransaction+"",totalPendingTransaction+"",data);
 			}
 		} catch (Exception e) {
 			LOGGER.info("Exception : {}",e.getMessage());
 			return new EnachTransactionReport<>(ResponseMessage.API_STATUS_FAILED, "Failed to fetch data",
-					ResponseMessage.SOMETHING_WENT_WRONG, "NA", null);
+					ResponseMessage.SOMETHING_WENT_WRONG, "NA","0","0","0", null);
 		}
 	}
 

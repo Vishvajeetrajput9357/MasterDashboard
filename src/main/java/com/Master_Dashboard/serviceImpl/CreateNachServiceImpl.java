@@ -56,7 +56,7 @@ public class CreateNachServiceImpl implements CreateNachService {
 			String apiRequest = "NA";
 			long merchantServiceId = 0;
 			String transactionStatus = "PENDING";
-			double merchantServiceCharge = 0.0;
+			double merchantServiceCharge = 10.0;
 			long transactionStatusId = 3;
 			
 			String serviceName ="";
