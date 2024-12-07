@@ -13,6 +13,7 @@ public class MasterDashboardApplication {
 	
 	public static void main(String[] args) {
 		
+		System.out.println(Encryption.decString("RFIsTevO+yySrMgui4vf4YVazPdtfCoR/By39zGU0Nc="));
 		SpringApplication.run(MasterDashboardApplication.class, args);
 	}
 

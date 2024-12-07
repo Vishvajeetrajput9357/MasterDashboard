@@ -65,8 +65,7 @@ public class CreateNachServiceImpl implements CreateNachService {
 			}else {
 				serviceName= "MANDATE REGISTRATIONS ESIGN";
 			}
-			
-			String mandateId = "NA";
+			String mandateId = "";
 
 			long requestId = eNachRequestService.saveENachRequest(createMandateRequest.getCustomerMobile(),
 					transactionAmount, createMandateRequest.getMandateStartDate(), createMandateRequest.getMandateExpiryDate(), createMandateRequest.getCustomerName(),
@@ -88,8 +87,8 @@ public class CreateNachServiceImpl implements CreateNachService {
 			map.put(ResponseMessage.STATUS, ResponseMessage.STATUS_SUCCESS);
 			map.put(ResponseMessage.CODE, ResponseMessage.SUCCESS);
 			map.put(ResponseMessage.DESCRIPTION, ResponseMessage.MANDATE_URL_SUCCESS);
-//			map.put("url", "https://empirical-tootsie--6c9fa64e.koyeb.app/dashboard/nachRedirect/createMandate");
-			map.put("url", "http://localhost:8090/dashboard/nachRedirect/createMandate/"+merchantTransactionRefId);
+			map.put("url", "https://empirical-tootsie--6c9fa64e.koyeb.app/dashboard/nachRedirect/createMandate/"+merchantTransactionRefId);
+//			map.put("url", "http://localhost:8090/dashboard/nachRedirect/createMandate/"+merchantTransactionRefId);
 			return map;
 
 		} catch (Exception e) {
