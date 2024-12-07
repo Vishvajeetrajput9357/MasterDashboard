@@ -55,12 +55,13 @@ public class TransactionReportServiceImpl implements TransactionReportService {
 						:  Collections.singletonList(Encryption.encString(enachTransactionRequest.getServiceName()));
 			
 		LOGGER.info("serviceNames "+serviceNames);
+		String mandateId=(enachTransactionRequest.getMandateId().equalsIgnoreCase(""))?"":Encryption.encString(enachTransactionRequest.getMandateId());
 		
 		Page<ENachTransactionDetails> result = enachTransactionDetailsRepository.findByENachTransactionRequest(
 				startDate,
 				endDate, serviceNames,
 				enachTransactionRequest.getStatusId(), enachTransactionRequest.getMerchantId(),
-				Encryption.encString(enachTransactionRequest.getMandateId()), pageable);
+				mandateId, pageable);
 		List<EnachTrxnReportResPayload> payloadList = new ArrayList<>();
 		LOGGER.info("result :  " + result.getSize());
 		
