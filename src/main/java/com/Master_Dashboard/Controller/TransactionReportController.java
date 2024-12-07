@@ -80,12 +80,13 @@ public class TransactionReportController {
 						.equalsIgnoreCase("COMPLETE MANDATE"))
 						? Arrays.asList(Encryption.encString("MANDATE REGISTRATIONS"), Encryption.encString("MANDATE REGISTRATIONS ESIGN"))
 								:  Collections.singletonList(Encryption.encString(enachTransactionRequest.getServiceName()));
+				String mandateId=(enachTransactionRequest.getMandateId().equalsIgnoreCase(""))?"":Encryption.encString(enachTransactionRequest.getMandateId());
 
 				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_SUCCESS,
 						ResponseMessage.ENACH_TRANSACTION_LIST, ResponseMessage.SUCCESS,
 						enachTransactionDetailsRepository.findTotalENachTransactionRequest(startDate, endDate,
 								serviceNames, enachTransactionRequest.getStatusId(),
-								enachTransactionRequest.getMerchantId(), Encryption.encString(enachTransactionRequest.getMandateId())) + "",data);
+								enachTransactionRequest.getMerchantId(), mandateId) + "",data);
 			}
 		} catch (Exception e) {
 			LOGGER.info("Exception : {}",e.getMessage());
