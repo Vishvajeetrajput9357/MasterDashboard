@@ -53,4 +53,7 @@ public interface EnachTransactionDetailsRepository extends JpaRepository<ENachTr
 		
 	Optional<ENachTransactionDetails> findByMerchantTransactionRefId(String merchantTransactionRefId);
 	
+	
+	Optional<ENachTransactionDetails> findByMandateId(String mandateId);
+	
 }

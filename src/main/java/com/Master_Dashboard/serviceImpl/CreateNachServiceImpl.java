@@ -4,15 +4,20 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
+import com.Master_Dashboard.Encryption.Encryption;
+import com.Master_Dashboard.entity.ENachTransactionDetails;
 import com.Master_Dashboard.ex.util.DateAndTime;
 import com.Master_Dashboard.ex.util.GenrateUniqueId;
 import com.Master_Dashboard.ex.util.SetErrorResponses;
 import com.Master_Dashboard.repository.EnachTransactionDetailsRepository;
 import com.Master_Dashboard.request.CreateMandateRequest;
+import com.Master_Dashboard.request.CreatePrasentationRequest;
 import com.Master_Dashboard.request.ResponseMessage;
 import com.Master_Dashboard.service.CreateNachService;
 import com.Master_Dashboard.service.ENachRequestService;
@@ -98,6 +103,64 @@ public class CreateNachServiceImpl implements CreateNachService {
 		
 	}
 
+	@Override
+	public Map<String, Object> createPrasentation(CreatePrasentationRequest createPrasentationRequest,
+			long merchantId) {
+		LOGGER.info("createPrasentation data : {}", createPrasentationRequest.toString());
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			Optional<ENachTransactionDetails> nachTransactionDetails=	eNachTransactionDetailsRepository.findByMandateId(Encryption.encString(createPrasentationRequest.getMandateId()));
+			if (!nachTransactionDetails.isPresent()) {
+				 return setErrorResponses.setErrorResponseWith(map, ResponseMessage.FAILED, "Debit presentation not allowed.");
+			}
+			ENachTransactionDetails enachTransactionDetail=nachTransactionDetails.get();
+			
+			if ("PENDING".equalsIgnoreCase(enachTransactionDetail.getTransactionStatus())||"FAILED".equalsIgnoreCase(enachTransactionDetail.getTransactionStatus())) {
+				 return setErrorResponses.setErrorResponseWith(map, ResponseMessage.FAILED, "Debit Presentation not allowed for pending or failed mandate Registration.");
+
+			}
+			
+			double transactionAmount = Double.valueOf(createPrasentationRequest.getAmount());
+			String merchantTransactionRefId = GenrateUniqueId.generateUniqueId()+"T"+merchantId;
+			String apiRequest = "NA";
+			long merchantServiceId = 0;
+			String transactionStatus = "PENDING";
+			double merchantServiceCharge = 7.0;
+			long transactionStatusId = 3;
+			String remark="Prasentation_intiated";
+			String serviceName ="DEBIT PRESENTATION";
+			String mandateId = createPrasentationRequest.getMandateId();
+
+			
+			long requestId = eNachRequestService.saveENachRequest(Encryption.decString(enachTransactionDetail.getCustomerMobileNumber()),
+					transactionAmount, enachTransactionDetail.getMandateStartDate(), enachTransactionDetail.getMandateEndDate(), Encryption.decString(enachTransactionDetail.getCustomerName()),
+					enachTransactionDetail.getCustomerBankAccountNumber(), Encryption.decString(enachTransactionDetail.getCustomerBankIfsc()),
+					Encryption.decString(enachTransactionDetail.getCustomerBankName()), Encryption.decString(enachTransactionDetail.getCustomerAccountType()),
+					"NA","NA", merchantId,
+					merchantTransactionRefId, Encryption.decString(enachTransactionDetail.geteNachUMRN()), enachTransactionDetail.getDebitDate(), apiRequest);
+			
+			eNachTransactionDetailsService.saveENachTransactionDetails(requestId, 0L,
+					Encryption.decString(enachTransactionDetail.getCustomerMobileNumber()), Encryption.decString(enachTransactionDetail.getCustomerEmail()), mandateId,
+					transactionStatus, "NA", enachTransactionDetail.getMandateStartDate(), enachTransactionDetail.getMandateEndDate(),
+					Encryption.decString(enachTransactionDetail.getCustomerName()), Encryption.decString(enachTransactionDetail.getCustomerBankAccountNumber()),
+					Encryption.decString(enachTransactionDetail.getCustomerBankIfsc()), Encryption.decString(enachTransactionDetail.getCustomerBankName()),
+					"NA", Encryption.decString(enachTransactionDetail.getCustomerAccountType()), "NA",
+					merchantId, merchantServiceId, transactionStatus, merchantTransactionRefId, transactionAmount, "NA",
+					merchantServiceCharge, 'N', 'N', "NA", serviceName, "NA", transactionStatusId, "HDFC", "NA", "NA",
+					"NA", enachTransactionDetail.getDebitDate());
+			
+			map.put(ResponseMessage.STATUS, ResponseMessage.STATUS_SUCCESS);
+			map.put(ResponseMessage.CODE, ResponseMessage.SUCCESS);
+			map.put(ResponseMessage.DESCRIPTION, ResponseMessage.MANDATE_URL_SUCCESS);
+			return map;
+			
+
+		} catch (Exception e) {	
+			return setErrorResponses.setErrorResponseWith(map, ResponseMessage.SOMETHING_WENT_WRONG, ResponseMessage.SOMETHING_WENT_WRONG_DESCRIPTION);
+		}
+	}
+	
 	public boolean checkStartDateAndEndDate(String startCollectionDate, String lastCollectionDate) {
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -111,5 +174,9 @@ public class CreateNachServiceImpl implements CreateNachService {
 			return false;
 		}
 	}
+
+	
+	
+	
 
 }

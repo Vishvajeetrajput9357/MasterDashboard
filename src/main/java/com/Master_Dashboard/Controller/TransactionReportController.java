@@ -51,7 +51,7 @@ public class TransactionReportController {
 			MerchantInfo merchantInfo = merchantInfoOpt.get();
 			if (!merchantInfoOpt.isPresent() || !(merchantInfo.getIsMerchantActive().equalsIgnoreCase("Y")
 					&& merchantInfo.getIsMerchantActive().equalsIgnoreCase("Y"))) {
-				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_FAILED, "Failed to fetch data",
+				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_FAILED, "Transaction not found",
 						ResponseMessage.UNAUTHORISED_DESCRIPTION, "NA","0","0","0", null);
 			}
 			enachTransactionRequest.setMerchantId(merchantInfo.getMerchantId());
@@ -60,7 +60,7 @@ public class TransactionReportController {
 			List<EnachTrxnReportResPayload> data = transactionReportService
 					.enachTransactionList(enachTransactionRequest);
 			if (data == null || data.isEmpty()) {
-				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_FAILED, "Failed to fetch data",
+				return new EnachTransactionReport<>(ResponseMessage.API_STATUS_FAILED, "Transaction not found",
 						ResponseMessage.FAILED, "NA", "0","0","0",null);
 			} else {
 				String startDate = enachTransactionRequest.getStartDate();
@@ -100,7 +100,7 @@ public class TransactionReportController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.info("Exception : {}",e.getMessage());
-			return new EnachTransactionReport<>(ResponseMessage.API_STATUS_FAILED, "Failed to fetch data",
+			return new EnachTransactionReport<>(ResponseMessage.API_STATUS_FAILED, "Transaction not found",
 					ResponseMessage.SOMETHING_WENT_WRONG, "NA","0","0","0", null);
 		}
 	}

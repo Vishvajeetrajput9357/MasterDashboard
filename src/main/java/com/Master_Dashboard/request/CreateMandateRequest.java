@@ -22,7 +22,7 @@ public class CreateMandateRequest {
 	private String customerEmailId;
 
 	@NotBlank(message = "customerAccountNo cannot be blank")
-	@Size(min = 10, max = 20, message = "customerAccountNo size must be between 10 and 20 digits")
+	@Size(min = 8, max = 20, message = "customerAccountNo size must be between 8 and 20 digits")
 	private String customerAccountNo;
 
 	@NotBlank(message = "mandateStartDate cannot be blank")
@@ -37,10 +37,12 @@ public class CreateMandateRequest {
 
 	@NotBlank(message = "mandateDebitAmount cannot be blank")
 	@Size(min = 1, max = 20, message = "mandateDebitAmount size must be between 1 and 20 characters")
+	@Pattern(regexp = "^(?!0+$).*", message = "mandateDebitAmount cannot be zero")
 	private String mandateDebitAmount;
 
 	@NotBlank(message = "mandateCollectionAmount cannot be blank")
 	@Size(min = 1, max = 20, message = "mandateCollectionAmount size must be between 1 and 20 characters")
+	@Pattern(regexp = "^(?!0+$).*", message = "mandateCollectionAmount cannot be zero")
 	private String mandateCollectionAmount;
 
 	@NotBlank(message = "mandateDebitFrequency cannot be blank")
