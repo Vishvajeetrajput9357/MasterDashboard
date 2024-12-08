@@ -61,7 +61,7 @@
 			<script>
 			setTimeout(function () {
 					window.location.href = "https://hemendra-rajput.dixzdxouk0355.amplifyapp.com/";
-				}, 5000);
+				},);
 
 			</script>
 			<style>
