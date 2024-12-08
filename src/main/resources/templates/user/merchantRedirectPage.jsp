@@ -25,7 +25,7 @@
 
 <body>
 
-	<header style="box-shadow: 0 5px 10px rgb(0 0 0 / 0.2)">
+	<!--<header style="box-shadow: 0 5px 10px rgb(0 0 0 / 0.2)">
 	       <div class="header_section"
 	           style="padding: 3px; display: flex; justify-content: space-between; align-items: center; margin: 0px 30px;">
 	           <div>
@@ -57,7 +57,7 @@
 						</center>
 					</div>
 				</div>
-			</div>
+			</div>-->
 			<script>
 			setTimeout(function () {
 					window.location.href = "https://hemendra-rajput.dixzdxouk0355.amplifyapp.com/";
@@ -118,7 +118,6 @@
 						justify-content: center;
 					}
 				}
-
 				.label-input-pair {
 					display: inline-block;
 					margin-right: 5px;
