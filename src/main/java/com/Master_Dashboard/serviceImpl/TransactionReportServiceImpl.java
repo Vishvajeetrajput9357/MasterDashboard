@@ -48,56 +48,63 @@ public class TransactionReportServiceImpl implements TransactionReportService {
 			startDate = startDate + " 00:00:00";
 			endDate = endDate + " 23:59:59";
 		}
-		LOGGER.info("serviceNames "+enachTransactionRequest.getServiceName());
+		LOGGER.info("serviceNames " + enachTransactionRequest.getServiceName());
 
 		List<String> serviceNames = (enachTransactionRequest.getServiceName().equalsIgnoreCase("COMPLETE MANDATE"))
-						? Arrays.asList(Encryption.encString("MANDATE REGISTRATIONS"), Encryption.encString("MANDATE REGISTRATIONS ESIGN"))
-						:  Collections.singletonList(Encryption.encString(enachTransactionRequest.getServiceName()));
-			
-		LOGGER.info("serviceNames "+serviceNames);
-		String mandateId=(enachTransactionRequest.getMandateId().equalsIgnoreCase(""))?"":Encryption.encString(enachTransactionRequest.getMandateId());
-		
+				? Arrays.asList(Encryption.encString("MANDATE REGISTRATIONS"),
+						Encryption.encString("MANDATE REGISTRATIONS ESIGN"))
+				: Collections.singletonList(Encryption.encString(enachTransactionRequest.getServiceName()));
+
+		LOGGER.info("serviceNames " + serviceNames);
+		String mandateId = (enachTransactionRequest.getMandateId().equalsIgnoreCase("")) ? ""
+				: Encryption.encString(enachTransactionRequest.getMandateId());
+
 		Page<ENachTransactionDetails> result = enachTransactionDetailsRepository.findByENachTransactionRequest(
-				startDate,
-				endDate, serviceNames,
-				enachTransactionRequest.getStatusId(), enachTransactionRequest.getMerchantId(),
-				mandateId, pageable);
+				startDate, endDate, serviceNames, enachTransactionRequest.getStatusId(),
+				enachTransactionRequest.getMerchantId(), mandateId, pageable);
 		List<EnachTrxnReportResPayload> payloadList = new ArrayList<>();
 		LOGGER.info("result :  " + result.getSize());
-		
+
 		int i = 0;
+
 		for (ENachTransactionDetails eNachTransactionDetails : result.getContent()) {
 			i++;
 			payloadList.add(convertToDto(eNachTransactionDetails, i + ""));
 		}
-		
-		LOGGER.info("result :  " +i);
 
+		LOGGER.info("result :  " + i);
 		return payloadList;
 	}
 
 	private EnachTrxnReportResPayload convertToDto(ENachTransactionDetails eNachTransactionDetails, String Number) {
+		try {
+			EnachTrxnReportResPayload payload = new EnachTrxnReportResPayload();
+			payload.setsNo(Number);
+			payload.setCustomerMobileNumber(Encryption.decString(eNachTransactionDetails.getCustomerMobileNumber()));
+			payload.seteNachTransactionId(eNachTransactionDetails.geteNachTransactionId());
+			payload.setTransactionStatus(eNachTransactionDetails.getTransactionStatus());
+			payload.setTransactionDate(eNachTransactionDetails.getTransactionDate() + "");
+			payload.setMerchantTransactionRefId(
+					Encryption.decString(eNachTransactionDetails.getMerchantTransactionRefId()));
+			payload.setTransactionAmount(eNachTransactionDetails.getTransactionAmount() + "");
+			payload.setIsReconcile(eNachTransactionDetails.getIsReconcile());
+			payload.setIsSettled(eNachTransactionDetails.getIsSettled());
+			payload.setServiceName(Encryption.decString(eNachTransactionDetails.getServiceName()));
+			payload.setTrxnRefId(Encryption.decString(eNachTransactionDetails.getMandateId()));
+			payload.setMandateId(Encryption.decString(eNachTransactionDetails.getMandateId()));
+			payload.setCustomerName(Encryption.decString(eNachTransactionDetails.getCustomerName()));
+			payload.seteNachUMRN(Encryption.decString(eNachTransactionDetails.geteNachUMRN()));
+			payload.setCharges(eNachTransactionDetails.getMerchantServiceCharge());
+			payload.setRemark(Encryption.decString(eNachTransactionDetails.getRemark()));
+			payload.setDebitDate(eNachTransactionDetails.getDebitDate());
+			payload.setCustomerBankAccountNumber(
+					Encryption.decString(eNachTransactionDetails.getCustomerBankAccountNumber()));
+			payload.setCustomerBankIfsc(Encryption.decString(eNachTransactionDetails.getCustomerBankIfsc()));
+			return payload;
 
-		EnachTrxnReportResPayload payload = new EnachTrxnReportResPayload();
-		payload.setsNo(Number);
-		payload.setCustomerMobileNumber(Encryption.decString(eNachTransactionDetails.getCustomerMobileNumber()));
-		payload.seteNachTransactionId(eNachTransactionDetails.geteNachTransactionId());
-		payload.setTransactionStatus(eNachTransactionDetails.getTransactionStatus());
-		payload.setTransactionDate(eNachTransactionDetails.getTransactionDate() + "");
-		payload.setMerchantTransactionRefId(Encryption.decString(eNachTransactionDetails.getMerchantTransactionRefId()));
-		payload.setTransactionAmount(eNachTransactionDetails.getTransactionAmount() + "");
-		payload.setIsReconcile(eNachTransactionDetails.getIsReconcile());
-		payload.setIsSettled(eNachTransactionDetails.getIsSettled());
-		payload.setServiceName(Encryption.decString(eNachTransactionDetails.getServiceName()));
-		payload.setTrxnRefId(Encryption.decString(eNachTransactionDetails.getMandateId()));
-		payload.setMandateId(Encryption.decString(eNachTransactionDetails.getMandateId()));
-		payload.setCustomerName(Encryption.decString(eNachTransactionDetails.getCustomerName()));
-		payload.seteNachUMRN(Encryption.decString(eNachTransactionDetails.geteNachUMRN()));
-		payload.setCharges(eNachTransactionDetails.getMerchantServiceCharge());
-		payload.setRemark(Encryption.decString(eNachTransactionDetails.getRemark()));
-		payload.setDebitDate(eNachTransactionDetails.getDebitDate());
-		payload.setCustomerBankAccountNumber(Encryption.decString(eNachTransactionDetails.getCustomerBankAccountNumber()));
-		payload.setCustomerBankIfsc(Encryption.decString(eNachTransactionDetails.getCustomerBankIfsc()));
-		return payload;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

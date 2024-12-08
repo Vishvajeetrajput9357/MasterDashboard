@@ -21,7 +21,8 @@ public interface EnachTransactionDetailsRepository extends JpaRepository<ENachTr
             "  AND (COALESCE(:statusId, '') = '' OR p.transaction_status_id = COALESCE(NULLIF(:statusId, ''), p.transaction_status_id)) " +
             "  AND (COALESCE(:merchantId, '') = '' OR p.merchant_id = COALESCE(NULLIF(:merchantId, ''), p.merchant_id)) " +
             "  AND (COALESCE(:serviceName, '') = '' OR p.service_name IN (:serviceName))" +
-            "  AND (COALESCE(:mandateId, '') = '' OR p.mandate_Id = COALESCE(NULLIF(:mandateId, ''), p.mandate_Id))",
+            "  AND (COALESCE(:mandateId, '') = '' OR p.mandate_Id = COALESCE(NULLIF(:mandateId, ''), p.mandate_Id))"+
+            "ORDER BY p.enach_transaction_id DESC",
     nativeQuery = true) 
 	Page<ENachTransactionDetails> findByENachTransactionRequest(
 	    @Param("startDate") String startDate,

@@ -99,6 +99,7 @@ public class TransactionReportController {
 								enachTransactionRequest.getMerchantId(), mandateId) + "",totalFailedTransaction+"",totalSuccessTransaction+"",totalPendingTransaction+"",data);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			LOGGER.info("Exception : {}",e.getMessage());
 			return new EnachTransactionReport<>(ResponseMessage.API_STATUS_FAILED, "Failed to fetch data",
 					ResponseMessage.SOMETHING_WENT_WRONG, "NA","0","0","0", null);
