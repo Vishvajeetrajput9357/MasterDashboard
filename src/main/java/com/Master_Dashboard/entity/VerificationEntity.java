@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "VERIFICATION_ENTITY")
 @EntityListeners(AuditingEntityListener.class)
 public class VerificationEntity {
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "VERIFICATION_ID")
@@ -27,7 +28,6 @@ public class VerificationEntity {
 	
 	@Column(name = "VERIFICATION_REQUEST_DETAILS")
 	private String verificationRequestDetails;
-	
 	
 	@Column(name = "IS_EKYC_VERIFIDE")
 	private String isEkycVerifide;
@@ -47,7 +47,7 @@ public class VerificationEntity {
 	public void setMerchantId(long merchantId) {
 		this.merchantId = merchantId;
 	}
-
+	
 	public String getVerificationType() {
 		return verificationType;
 	}

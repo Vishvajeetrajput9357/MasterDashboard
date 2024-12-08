@@ -130,10 +130,12 @@ public class MerchantEkycController {
 			Optional<MerchantInfo> merchantInfoOpt = validateMerchant(clientId, clientSecret);
 
 			if (!merchantInfoOpt.isPresent()) {
-
 				return setUnauthorised(response);
 			}
-
+			
+			if (checkMerchantKycAlredyExist(merchantInfoOpt.get().getMerchantId(), Encryption.encString("BANKACCOUNT"))) {
+				return setErrorResponse(response, ResponseMessage.FAILED, "Bank account is already verifide");
+			}
 			response = merchantEkycService.merchantBankAccountVerification(merchantBankAccountVerification,
 					merchantInfoOpt.get().getMerchantId());
 

@@ -43,31 +43,31 @@ public class ENachTransactionDetails {
 	@Column(name = "MANDATE_TYPE", length = 100, nullable = false)
 	private String mandateType;
 
-	@Column(name = "MANDATE_START_DATE", length = 100, nullable = false, unique = true)
+	@Column(name = "MANDATE_START_DATE", length = 100, nullable = false)
 	private String mandateStartDate;
 	
-	@Column(name = "MANDATE_END_DATE", length = 100, nullable = false, unique = true)
+	@Column(name = "MANDATE_END_DATE", length = 100, nullable = false)
 	private String mandateEndDate;
 
-	@Column(name = "CUSTOMER_NAME", length = 100, nullable = false, unique = true)
+	@Column(name = "CUSTOMER_NAME", length = 100, nullable = false)
 	private String customerName;
 
-	@Column(name = "CUSTOMER_BANK_ACCOUNT_NO", length = 100, nullable = false, unique = true)
+	@Column(name = "CUSTOMER_BANK_ACCOUNT_NO", length = 100, nullable = false)
 	private String customerBankAccountNumber;
 
-	@Column(name = "CUSTOMER_BANK_IFSC", length = 100, nullable = false, unique = true)
+	@Column(name = "CUSTOMER_BANK_IFSC", length = 100, nullable = false)
 	private String customerBankIfsc;
 
-	@Column(name = "CUSTOMER_BANK_NAME", length = 100, nullable = false, unique = true)
+	@Column(name = "CUSTOMER_BANK_NAME", length = 100, nullable = false)
 	private String customerBankName;
 
-	@Column(name = "FREQUENCY", length = 100, nullable = false, unique = true)
+	@Column(name = "FREQUENCY", length = 100, nullable = false)
 	private String frequency;
 
-	@Column(name = "CUSTOMER_ACCOUNT_TYPE", length = 100, nullable = false, unique = true)
+	@Column(name = "CUSTOMER_ACCOUNT_TYPE", length = 100, nullable = false)
 	private String customerAccountType;
 
-	@Column(name = "INSTRUMENT_TYPE", length = 100, nullable = false, unique = true)
+	@Column(name = "INSTRUMENT_TYPE", length = 100, nullable = false)
 	private String instrumentType;
 
 	@Column(name = "MERCHANT_ID", nullable = false)

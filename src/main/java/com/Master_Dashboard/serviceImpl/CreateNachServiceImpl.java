@@ -86,7 +86,7 @@ public class CreateNachServiceImpl implements CreateNachService {
 					createMandateRequest.getCustomerbankIFSC(), createMandateRequest.getBankName(),
 					createMandateRequest.getMandateDebitFrequency(), createMandateRequest.getBankAccountType(), "NA",
 					merchantId, merchantServiceId, transactionStatus, merchantTransactionRefId, transactionAmount, "NA",
-					merchantServiceCharge, 'N', 'N', "NA", serviceName, "NA", transactionStatusId, "HDFC", "NA", "NA",
+					merchantServiceCharge, 'N', 'N', "Pending at user authentication", serviceName, "NA", transactionStatusId, "HDFC", "NA", "NA",
 					createMandateRequest.getDebitType(), "NA");
 			
 			map.put(ResponseMessage.STATUS, ResponseMessage.STATUS_SUCCESS);
@@ -116,9 +116,8 @@ public class CreateNachServiceImpl implements CreateNachService {
 			}
 			ENachTransactionDetails enachTransactionDetail=nachTransactionDetails.get();
 			
-			if ("PENDING".equalsIgnoreCase(enachTransactionDetail.getTransactionStatus())||"FAILED".equalsIgnoreCase(enachTransactionDetail.getTransactionStatus())) {
+			if ("PENDING".equalsIgnoreCase(enachTransactionDetail.getTransactionStatus())||"FAILED".equalsIgnoreCase(enachTransactionDetail.getTransactionStatus()) || !(enachTransactionDetail.getMerchantId()==merchantId)) {
 				 return setErrorResponses.setErrorResponseWith(map, ResponseMessage.FAILED, "Debit Presentation not allowed for pending or failed mandate Registration.");
-
 			}
 			
 			double transactionAmount = Double.valueOf(createPrasentationRequest.getAmount());
@@ -154,7 +153,6 @@ public class CreateNachServiceImpl implements CreateNachService {
 			map.put(ResponseMessage.CODE, ResponseMessage.SUCCESS);
 			map.put(ResponseMessage.DESCRIPTION, ResponseMessage.MANDATE_URL_SUCCESS);
 			return map;
-			
 
 		} catch (Exception e) {	
 			return setErrorResponses.setErrorResponseWith(map, ResponseMessage.SOMETHING_WENT_WRONG, ResponseMessage.SOMETHING_WENT_WRONG_DESCRIPTION);

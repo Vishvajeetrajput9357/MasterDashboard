@@ -15,10 +15,10 @@ public class CoreTempTrxn {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "core_temp_trxn_id", nullable = false, unique = true)
+    @Column(name = "core_temp_trxn_id", nullable = false)
     private Long coreTempTrxnId;
 
-    @Column(name = "transaction_id", nullable = false)
+    @Column(name = "transaction_id", nullable = false, length = 36) // if UUID
     private String transactionId;
 
     @Column(name = "trxn_info", length = 2000)
@@ -27,10 +27,10 @@ public class CoreTempTrxn {
     @Column(name = "app_trxn_info", nullable = false, length = 1000)
     private String appTrxnInfo;
 
-    @Column(name = "retry_count", length = 20)
+    @Column(name = "retry_count", length = 50) // Change to Integer if it's a numeric value
     private String retryCount;
 
-    @Column(name = "transaction_date", length = 100)
+    @Column(name = "transaction_date")
     private Timestamp transactionDate;
 
     public Long getCoreTempTrxnId() {
@@ -53,7 +53,7 @@ public class CoreTempTrxn {
         return trxnInfo;
     }
 
-    public void setTrxnInfo(String trxnInfo) {
+    public void setTrxnInfo(String trxnInfo) {	
         this.trxnInfo = trxnInfo;
     }
 
@@ -73,12 +73,10 @@ public class CoreTempTrxn {
         this.retryCount = retryCount;
     }
 
-	
     public Timestamp getTransactionDate() {
 		return transactionDate;
 	}
 
-	
     public void setTransactionDate(Timestamp transactionDate) {
 		this.transactionDate = transactionDate;
 	}

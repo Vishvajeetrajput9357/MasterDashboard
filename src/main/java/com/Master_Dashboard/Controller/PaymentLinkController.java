@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URLDecoder;
 import com.Master_Dashboard.Encryption.Encryption;
@@ -22,6 +24,7 @@ import com.Master_Dashboard.entity.ENachTransactionDetails;
 import com.Master_Dashboard.repository.CoreTempRepository;
 import com.Master_Dashboard.repository.ENachResponseRepository;
 import com.Master_Dashboard.repository.EnachTransactionDetailsRepository;
+
 
 @Controller
 @RequestMapping("/nachRedirect")
@@ -44,11 +47,9 @@ public class PaymentLinkController {
 
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/paymentLink", method = RequestMethod.POST)
-	public synchronized ModelAndView paymentLink(@RequestBody String reqbody) {
-
+	public synchronized ModelAndView paymentLink( @RequestBody String reqbody ) {
 		LOGGER.info(reqbody);
 		ModelAndView model = new ModelAndView();
-
 		try {
 			Timestamp trxnDate1 = Timestamp.valueOf(com.Master_Dashboard.ex.util.DateAndTime.getCurrentTimeInIST());
 
@@ -80,8 +81,14 @@ public class PaymentLinkController {
 					coreTempRepository.save(coreTempTrxn);
 					
 					try {
-						JSONObject jsonObject = new JSONObject(response);
-						String merchantTrxnRefId=jsonObject.getString("MsgId");
+						String res=response;
+//						org.json.JSONObject jsonObject = new org.json.JSONObject(res);
+	
+						
+						com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+				        JsonNode rootNode = mapper.readTree(response);
+						
+						String merchantTrxnRefId=rootNode.get("MsgId").asText();
 						
 						Optional<ENachTransactionDetails> eNachTransactionDetails=
 								eNachTransactionDetailsRepository.findByMerchantTransactionRefId(Encryption.encString(merchantTrxnRefId));
@@ -97,8 +104,7 @@ public class PaymentLinkController {
 						String trxnRefId="";
 						long statusId=0;
 						
-				        JSONArray errorsArray = jsonObject.getJSONArray("Errors");
-				        String errorMessage = errorsArray.getJSONObject(0).getString("Error_Message");
+				        String errorMessage =  rootNode.path("Errors").get(0).path("Error_Message").asText();
 
 						ENachResponse eNachResponse = new ENachResponse();
 						eNachResponse.setResponseDate(trxnDate1);
@@ -107,24 +113,24 @@ public class PaymentLinkController {
 						eNachResponse.setMerchantId(eNachTransactionDetails.get().getMerchantId());
 					
 						eNachResponse.setTrxnDate(trxnDate1+"");
-						if (jsonObject.getString("Status").equalsIgnoreCase("Failed")) {
+						if (rootNode.get("Status").asText().equalsIgnoreCase("Failed")) {
 							statusId=2;
 							umrn="NA";
 							mandateStatus="FAILED";
 							mandateMessage=errorMessage+".";
 							eNachResponse.setUmrn("NA");
-							eNachResponse.setMandateId(jsonObject.getString("RefId"));
-							trxnRefId=jsonObject.getString("RefId");
+							eNachResponse.setMandateId(rootNode.get("RefId").asText());
+							trxnRefId=rootNode.get("RefId").asText();
 							transactionUpdateDate=trxnDate1+"";
-						}else if(jsonObject.getString("Status").equalsIgnoreCase("Success")) {
+						}else if(rootNode.get("Status").asText().equalsIgnoreCase("Success")) {
 							statusId=1;
-							umrn=jsonObject.getString("Filler10");
-							trxnRefId=jsonObject.getString("Filler9");
+							umrn=rootNode.get("Filler10").asText();
+							trxnRefId=rootNode.get("Filler9").asText();
 							mandateStatus="SUCCESS";
 							mandateMessage="Mandate has been successfully registered.";
 							transactionUpdateDate=trxnDate1+"";
 							eNachResponse.setUmrn(umrn);
-							eNachResponse.setMandateId(jsonObject.getString("Filler9"));
+							eNachResponse.setMandateId(trxnRefId);
 						}else {
 							statusId=3;
 							umrn="NA";
