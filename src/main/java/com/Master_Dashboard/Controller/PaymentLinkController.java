@@ -94,7 +94,7 @@ public class PaymentLinkController {
 						String mandateStatus="";
 						String mandateMessage="";
 						String transactionUpdateDate="";
-						String mandateId="";
+						String trxnRefId="";
 						long statusId=0;
 						
 				        JSONArray errorsArray = jsonObject.getJSONArray("Errors");
@@ -114,12 +114,12 @@ public class PaymentLinkController {
 							mandateMessage=errorMessage+".";
 							eNachResponse.setUmrn("NA");
 							eNachResponse.setMandateId(jsonObject.getString("RefId"));
-							mandateId=jsonObject.getString("RefId");
+							trxnRefId=jsonObject.getString("RefId");
 							transactionUpdateDate=trxnDate1+"";
 						}else if(jsonObject.getString("Status").equalsIgnoreCase("Success")) {
 							statusId=1;
 							umrn=jsonObject.getString("Filler10");
-							mandateId=jsonObject.getString("Filler9");
+							trxnRefId=jsonObject.getString("Filler9");
 							mandateStatus="SUCCESS";
 							mandateMessage="Mandate has been successfully registered.";
 							transactionUpdateDate=trxnDate1+"";
@@ -128,7 +128,7 @@ public class PaymentLinkController {
 						}else {
 							statusId=3;
 							umrn="NA";
-							mandateId="NA";
+							trxnRefId="NA";
 							mandateStatus="PENDING";
 							mandateMessage=""+errorMessage;
 							transactionUpdateDate=trxnDate1+"";
@@ -142,7 +142,7 @@ public class PaymentLinkController {
 						eNachTransactionDetail.setRemark(Encryption.encString(mandateMessage));
 						eNachTransactionDetail.setTransactionUpdateDate(transactionUpdateDate);
 						eNachTransactionDetail.setResponseId(eNachResponse.getResponsetId());
-						eNachTransactionDetail.setMandateId(Encryption.encString(mandateId));
+						eNachTransactionDetail.setTrxnRefId(Encryption.encString(trxnRefId));
 						eNachTransactionDetail.setTransactionStatus(mandateStatus);
 						eNachTransactionDetail.setApiStatus(mandateStatus);
 						eNachTransactionDetail.setTransactionStatusId(statusId);
@@ -202,7 +202,7 @@ public class PaymentLinkController {
 
 			String hash = AESEncrytDecry.checkSum(hashString);
 
-			System.out.println(hash);
+			LOGGER.info(hash);
 //	        2c30633671720cabb04ec4248188ba9efa1dfa3e5a234f199c13a8968da5049f
 //	        2ae0598c59f0ab804652bd027cce6a1ff4012a7da4df0bddbe9b80899c11d528
 			model.addObject("merchantCategoryCode", "U099");

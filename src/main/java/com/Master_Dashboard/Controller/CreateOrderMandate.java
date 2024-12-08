@@ -58,6 +58,26 @@ public class CreateOrderMandate {
 			return setErrorResponses.setApiStatusSomethingWent(map);
 		}
 	}
+	
+	/*
+	 * @PostMapping("/createPrasentation") public Map<String, Object>
+	 * createPrasentation(@RequestHeader("Client-Id") String clientId,
+	 * 
+	 * @RequestHeader("Client-Secret") String clientSecret,
+	 * 
+	 * @Valid @RequestBody CreateMandateRequest createPrasentationRequest) {
+	 * Map<String, Object> map = new HashMap<>(); try { Optional<MerchantInfo>
+	 * merchantInfoOpt = validateMerchant(clientId, clientSecret); if
+	 * (!merchantInfoOpt.isPresent()) { return
+	 * setErrorResponses.setUnauthorised(map); }
+	 * LOGGER.info("createMandate : "+createPrasentationRequest.toString()); return
+	 * createNachService.createPrasentation(createPrasentationRequest,
+	 * merchantInfoOpt.get().getMerchantId());
+	 * 
+	 * } catch (Exception e) {
+	 * LOGGER.error("Error occurred during order creation : ", e); return
+	 * setErrorResponses.setApiStatusSomethingWent(map); } }
+	 */
 
 	public Optional<MerchantInfo> validateMerchant(String clientId, String clientSecret) {
 		try {
