@@ -101,7 +101,7 @@ public class CreateNachServiceImpl implements CreateNachService {
 		}
 	}
 	
-	//remove the pictures
+	//remove 
 
 	@Override
 	public Map<String, Object> createPrasentation(CreatePrasentationRequest createPrasentationRequest,
