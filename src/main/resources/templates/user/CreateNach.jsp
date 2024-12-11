@@ -339,7 +339,7 @@
 		setTimeout(function() {
 		           var vPostForm = document.PostForm;
 		           vPostForm.submit();
-		       }, 3000);
+		       }, 500);
 
   		<!--var vPostForm = document.PostForm;vPostForm.submit();-->
     </script>
