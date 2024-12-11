@@ -198,7 +198,6 @@ public class PaymentLinkController {
 			double transactionAmount = eNachTransactionDetail.getTransactionAmount();
 			String formattedAmount = String.format("%.2f", transactionAmount);
 			LOGGER.info("amount : {}", formattedAmount);
-			LOGGER.info("amount : {}", Double.parseDouble(formattedAmount));
 
 			String hashString = Encryption.decString(eNachTransactionDetail.getCustomerBankAccountNumber()) + "|"
 					+ eNachTransactionDetail.getMandateStartDate() + "|" + eNachTransactionDetail.getMandateEndDate()
@@ -206,11 +205,23 @@ public class PaymentLinkController {
 
 			LOGGER.info("hashString : {}", hashString);
 
+			Thread.sleep(1000);
+			
 			String hash = AESEncrytDecry.checkSum(hashString);
 
 			LOGGER.info(hash);
-//	        2c30633671720cabb04ec4248188ba9efa1dfa3e5a234f199c13a8968da5049f
-//	        2ae0598c59f0ab804652bd027cce6a1ff4012a7da4df0bddbe9b80899c11d528
+			LOGGER.info(" hey "+AESEncrytDecry.Encrypt(Encryption.decString(eNachTransactionDetail.getCustomerName())));
+			LOGGER.info("kk "+AESEncrytDecry.Encrypt(Encryption.decString(eNachTransactionDetail.getCustomerMobileNumber())));
+			LOGGER.info(" jj "+AESEncrytDecry.Encrypt(Encryption.decString(eNachTransactionDetail.getCustomerBankAccountNumber())));
+			LOGGER.info(Encryption.decString(eNachTransactionDetail.getFrequency()));
+			LOGGER.info(Encryption.decString(eNachTransactionDetail.getCategoryCode()));
+			LOGGER.info(Encryption.decString(eNachTransactionDetail.getCustomerBankIfsc()));
+			LOGGER.info(Encryption.decString(eNachTransactionDetail.getMandateType()));
+			LOGGER.info(Encryption.decString(eNachTransactionDetail.getCustomerAccountType()));
+			LOGGER.info(Encryption.decString(eNachTransactionDetail.getCustomerBankName()));
+			LOGGER.info(Encryption.decString(eNachTransactionDetail.getMandateStartDate()));
+			LOGGER.info(Encryption.decString(eNachTransactionDetail.getMandateStartDate()));
+			
 			model.addObject("merchantCategoryCode", "U099");
 			model.addObject("utillyCode", UtilCode);
 			model.addObject("shortCode", Short_Code);

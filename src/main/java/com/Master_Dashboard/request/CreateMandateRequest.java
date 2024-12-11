@@ -45,9 +45,9 @@ public class CreateMandateRequest {
 	@Pattern(regexp = "^(?!0+$).*", message = "mandateCollectionAmount cannot be zero")
 	private String mandateCollectionAmount;
 
-	@NotBlank(message = "mandateDebitFrequency cannot be blank")
-	@Size(min = 1, max = 10, message = "mandateDebitFrequency size must be between 1 and 10 characters")
-	@Pattern(regexp = "ADHO|INDA|DAIL|WEEK|MNTH|QURT|MIAN|YEAR|BIMN", message = "mandateDebitFrequency")
+//	@NotBlank(message = "mandateDebitFrequency cannot be blank")
+//	@Size(min = 1, max = 10, message = "mandateDebitFrequency size must be between 1 and 10 characters")
+//	@Pattern(regexp = "", message = "mandateDebitFrequency")
 	private String mandateDebitFrequency;
 
 	@NotBlank(message = "debitType cannot be blank")

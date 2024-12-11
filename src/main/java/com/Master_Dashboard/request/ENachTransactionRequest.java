@@ -1,5 +1,6 @@
 package com.Master_Dashboard.request;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +26,8 @@ public class ENachTransactionRequest {
 	
 	@JsonIgnore
 	private Long merchantId;
-
+	
+	@Value("")
 	private String mandateId;
 	
 	public String getStartDate() {

@@ -32,7 +32,6 @@ public class ENachTransactionDetailsServiceImpl implements ENachTransactionDetai
 		long res=0;
 		try {
 			Timestamp tDate = Timestamp.valueOf(DateAndTime.getCurrentTimeInIST());
-			
 			ENachTransactionDetails eNachTransactionDetails=new ENachTransactionDetails();
 			eNachTransactionDetails.setApiStatus(apiStatus);
 			eNachTransactionDetails.setCategoryCode(Encryption.encString(categoryCode));

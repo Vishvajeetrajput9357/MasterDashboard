@@ -108,7 +108,7 @@ public class CreateNachServiceImpl implements CreateNachService {
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			Optional<ENachTransactionDetails> nachTransactionDetails=	eNachTransactionDetailsRepository.findByMandateId(Encryption.encString(createPrasentationRequest.getMandateId()));
+			Optional<ENachTransactionDetails> nachTransactionDetails=	eNachTransactionDetailsRepository.findByMerchantTransactionRefId(Encryption.encString(createPrasentationRequest.getMandateId()));
 			if (!nachTransactionDetails.isPresent()) {
 				 return setErrorResponses.setErrorResponseWith(map, ResponseMessage.FAILED, "Debit presentation not allowed.");
 			}
@@ -117,6 +117,18 @@ public class CreateNachServiceImpl implements CreateNachService {
 			if ("PENDING".equalsIgnoreCase(enachTransactionDetail.getTransactionStatus())||"FAILED".equalsIgnoreCase(enachTransactionDetail.getTransactionStatus()) || !(enachTransactionDetail.getMerchantId()==merchantId)) {
 				 return setErrorResponses.setErrorResponseWith(map, ResponseMessage.FAILED, "Debit Presentation not allowed for pending or failed mandate Registration.");
 			}
+			
+			/*
+			 * if (createPrasentationRequest.getSettlementDate().equalsIgnoreCase(
+			 * enachTransactionDetail.getDebitDate()) &&
+			 * Double.parseDouble(createPrasentationRequest.getAmount())==
+			 * enachTransactionDetail.getTransactionAmount()) {
+			 * System.out.println("jkhdkahs"); return
+			 * setErrorResponses.setErrorResponseWith(map, ResponseMessage.FAILED,
+			 * "Duplicate debit presentation is not allowed on the same settlement date.");
+			 * }
+			 */
+			
 			
 			double transactionAmount = Double.valueOf(createPrasentationRequest.getAmount());
 			String merchantTransactionRefId = GenrateUniqueId.generateUniqueId()+"T"+merchantId;
@@ -144,8 +156,8 @@ public class CreateNachServiceImpl implements CreateNachService {
 					Encryption.decString(enachTransactionDetail.getCustomerBankIfsc()), Encryption.decString(enachTransactionDetail.getCustomerBankName()),
 					"NA", Encryption.decString(enachTransactionDetail.getCustomerAccountType()), "NA",
 					merchantId, merchantServiceId, transactionStatus, merchantTransactionRefId, transactionAmount, "NA",
-					merchantServiceCharge, 'N', 'N', "NA", serviceName, "NA", transactionStatusId, "HDFC", "NA", "NA",
-					"NA", enachTransactionDetail.getDebitDate());
+					merchantServiceCharge, 'N', 'N', remark, serviceName, "NA", transactionStatusId, "HDFC", "NA", "NA",
+					"NA", createPrasentationRequest.getSettlementDate());
 			
 			map.put(ResponseMessage.STATUS, ResponseMessage.STATUS_SUCCESS);
 			map.put(ResponseMessage.CODE, ResponseMessage.SUCCESS);
@@ -153,6 +165,7 @@ public class CreateNachServiceImpl implements CreateNachService {
 			return map;
 
 		} catch (Exception e) {	
+			e.printStackTrace();
 			return setErrorResponses.setErrorResponseWith(map, ResponseMessage.SOMETHING_WENT_WRONG, ResponseMessage.SOMETHING_WENT_WRONG_DESCRIPTION);
 		}
 	}
@@ -171,8 +184,5 @@ public class CreateNachServiceImpl implements CreateNachService {
 		}
 	}
 
-	
-	
-	
 
 }
