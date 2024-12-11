@@ -53,17 +53,19 @@ public class TransactionReportServiceImpl implements TransactionReportService {
 		List<String> serviceNames = (enachTransactionRequest.getServiceName().equalsIgnoreCase("COMPLETE MANDATE"))
 				? Arrays.asList(Encryption.encString("MANDATE REGISTRATIONS"),
 						Encryption.encString("MANDATE REGISTRATIONS ESIGN"))
-				: Collections.singletonList(Encryption.encString(enachTransactionRequest.getServiceName()));
+				: (enachTransactionRequest.getServiceName().equalsIgnoreCase("ALL SERVICES"))
+						? Arrays.asList(Encryption.encString("MANDATE REGISTRATIONS"),
+								Encryption.encString("MANDATE REGISTRATIONS ESIGN"),Encryption.encString("DEBIT PRESENTATION"))
+						: Collections.singletonList(Encryption.encString(enachTransactionRequest.getServiceName()));
 
-		LOGGER.info("serviceNames " + serviceNames);
-		String mandateId = (enachTransactionRequest.getMandateId().equalsIgnoreCase("")) ? ""
+		String mandateId = (null==enachTransactionRequest.getMandateId()||enachTransactionRequest.getMandateId().equalsIgnoreCase("")) ? ""
 				: Encryption.encString(enachTransactionRequest.getMandateId());
 
 		Page<ENachTransactionDetails> result = enachTransactionDetailsRepository.findByENachTransactionRequest(
 				startDate, endDate, serviceNames, enachTransactionRequest.getStatusId(),
 				enachTransactionRequest.getMerchantId(), mandateId, pageable);
 		List<EnachTrxnReportResPayload> payloadList = new ArrayList<>();
-		LOGGER.info("result :  " + result.getSize());
+		LOGGER.info("getSize :  " + result.getSize());
 
 		int i = 0;
 

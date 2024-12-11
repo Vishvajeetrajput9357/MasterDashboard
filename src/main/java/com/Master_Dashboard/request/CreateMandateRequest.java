@@ -47,7 +47,7 @@ public class CreateMandateRequest {
 
 //	@NotBlank(message = "mandateDebitFrequency cannot be blank")
 //	@Size(min = 1, max = 10, message = "mandateDebitFrequency size must be between 1 and 10 characters")
-//	@Pattern(regexp = "", message = "mandateDebitFrequency")
+//	@Pattern(regexp = "	", message = "mandateDebitFrequency")
 	private String mandateDebitFrequency;
 
 	@NotBlank(message = "debitType cannot be blank")

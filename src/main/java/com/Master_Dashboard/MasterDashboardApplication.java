@@ -10,10 +10,9 @@ import com.Master_Dashboard.Encryption.Encryption;
 @EnableJpaRepositories("com.Master_Dashboard.repository")
 public class MasterDashboardApplication {
 	
-	
 	public static void main(String[] args) {
 		
-		System.out.println(Encryption.encString("DEBIT PRESENTATION"));
+		System.out.println(Encryption.decString("uK/JAHtBpN/1Idhw4aP4LYHwJ+uEhzMWjXTxMe35em8="));
 		SpringApplication.run(MasterDashboardApplication.class, args);
 	}
 

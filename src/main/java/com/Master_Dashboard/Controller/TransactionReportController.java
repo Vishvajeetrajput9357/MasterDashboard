@@ -75,11 +75,15 @@ public class TransactionReportController {
 					endDate = endDate + " 23:59:59";
 				}
 
-				List<String> serviceNames = (enachTransactionRequest.getServiceName()
-						.equalsIgnoreCase("COMPLETE MANDATE"))
-						? Arrays.asList(Encryption.encString("MANDATE REGISTRATIONS"), Encryption.encString("MANDATE REGISTRATIONS ESIGN"))
-								:  Collections.singletonList(Encryption.encString(enachTransactionRequest.getServiceName()));
-				String mandateId=(enachTransactionRequest.getMandateId().equalsIgnoreCase(""))?"":Encryption.encString(enachTransactionRequest.getMandateId());
+				List<String> serviceNames = (enachTransactionRequest.getServiceName().equalsIgnoreCase("COMPLETE MANDATE"))
+						? Arrays.asList(Encryption.encString("MANDATE REGISTRATIONS"),
+								Encryption.encString("MANDATE REGISTRATIONS ESIGN"))
+						: (enachTransactionRequest.getServiceName().equalsIgnoreCase("ALL SERVICES"))
+								? Arrays.asList(Encryption.encString("MANDATE REGISTRATIONS"),
+										Encryption.encString("MANDATE REGISTRATIONS ESIGN"),Encryption.encString("DEBIT PRESENTATION"))
+								: Collections.singletonList(Encryption.encString(enachTransactionRequest.getServiceName()));
+				
+				String mandateId=(null==enachTransactionRequest.getMandateId()||enachTransactionRequest.getMandateId().equalsIgnoreCase(""))?"":Encryption.encString(enachTransactionRequest.getMandateId());
 				
 				 int totalFailedTransaction=enachTransactionDetailsRepository.findTotalENachTransactionRequest(startDate, endDate,
 							serviceNames, 2L,
