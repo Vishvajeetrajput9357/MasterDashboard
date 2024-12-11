@@ -100,6 +100,8 @@ public class CreateNachServiceImpl implements CreateNachService {
 			return setErrorResponses.setErrorResponseWith(map, ResponseMessage.SOMETHING_WENT_WRONG, ResponseMessage.SOMETHING_WENT_WRONG_DESCRIPTION);
 		}
 	}
+	
+	//remove the pictures
 
 	@Override
 	public Map<String, Object> createPrasentation(CreatePrasentationRequest createPrasentationRequest,
