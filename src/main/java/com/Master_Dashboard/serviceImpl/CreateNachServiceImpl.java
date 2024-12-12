@@ -87,7 +87,7 @@ public class CreateNachServiceImpl implements CreateNachService {
 					createMandateRequest.getMandateDebitFrequency(), createMandateRequest.getBankAccountType(), "NA",
 					merchantId, merchantServiceId, transactionStatus, merchantTransactionRefId, transactionAmount, "NA",
 					merchantServiceCharge, 'N', 'N', "Pending at user authentication", serviceName, "NA", transactionStatusId, "HDFC", "NA", "NA",
-					createMandateRequest.getDebitType(), "NA");
+					createMandateRequest.getDebitType(), "NA",createMandateRequest.getMandateCollectionAmount());
 			
 			map.put(ResponseMessage.STATUS, ResponseMessage.STATUS_SUCCESS);
 			map.put(ResponseMessage.CODE, ResponseMessage.SUCCESS);
@@ -159,7 +159,7 @@ public class CreateNachServiceImpl implements CreateNachService {
 					"NA", Encryption.decString(enachTransactionDetail.getCustomerAccountType()), "NA",
 					merchantId, merchantServiceId, transactionStatus, merchantTransactionRefId, transactionAmount, "NA",
 					merchantServiceCharge, 'N', 'N', remark, serviceName, "NA", transactionStatusId, "HDFC", "NA", "NA",
-					"NA", createPrasentationRequest.getSettlementDate());
+					"NA", createPrasentationRequest.getSettlementDate(),"0");
 			
 			map.put(ResponseMessage.STATUS, ResponseMessage.STATUS_SUCCESS);
 			map.put(ResponseMessage.CODE, ResponseMessage.SUCCESS);

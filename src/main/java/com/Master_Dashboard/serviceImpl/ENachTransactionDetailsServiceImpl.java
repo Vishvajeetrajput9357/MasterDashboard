@@ -28,7 +28,7 @@ public class ENachTransactionDetailsServiceImpl implements ENachTransactionDetai
 			long merchantId, long merchantServiceId, String transactionStatus, String merchantTransactionRefId,
 			double transactionAmount, String eNachId, double merchantServiceCharge, char isReconcile, char isSettled,
 			String remark, String serviceName, String trxnRefId, long transactionStatusId, String serviceProviderName,
-			String serviceProviderUtilityCode, String eNachUMRN, String categoryCode, String debitDate) {
+			String serviceProviderUtilityCode, String eNachUMRN, String categoryCode, String debitDate,String maxAmount) {
 		long res=0;
 		try {
 			Timestamp tDate = Timestamp.valueOf(DateAndTime.getCurrentTimeInIST());
@@ -69,6 +69,7 @@ public class ENachTransactionDetailsServiceImpl implements ENachTransactionDetai
 			eNachTransactionDetails.setTransactionStatus(transactionStatus);
 			eNachTransactionDetails.setTransactionStatusId(transactionStatusId);
 			eNachTransactionDetails.setTransactionUpdateDate("NA");
+			eNachTransactionDetails.setMaxAmount(maxAmount);
 			eNachTransactionDetails.setTrxnRefId(Encryption.encString(trxnRefId));
 			
 			LOGGER.info("Mandate detials : "+eNachTransactionDetails.toString());

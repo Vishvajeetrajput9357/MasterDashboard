@@ -9,6 +9,6 @@ public interface ENachTransactionDetailsService {
 			long merchantServiceId, String transactionStatus, String merchantTransactionRefId, double transactionAmount,
 			String eNachId, double merchantServiceCharge, char isReconcile, char isSettled, String remark,
 			String serviceName, String trxnRefId, long transactionStatusId, String serviceProviderName,
-			String serviceProviderUtilityCode, String eNachUMRN, String categoryCode, String debitDate);
+			String serviceProviderUtilityCode, String eNachUMRN, String categoryCode, String debitDate,String maxAmount);
 
 }

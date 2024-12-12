@@ -24,7 +24,7 @@ public class ENachTransactionDetails {
 
 	@Column(name = "REQUEST_ID")
 	private Long requestId;
-	
+
 	@Column(name = "RESPONSE_ID")
 	private Long responseId;
 
@@ -33,7 +33,7 @@ public class ENachTransactionDetails {
 
 	@Column(name = "CUSTOMER_EMAIL", length = 100, nullable = false)
 	private String customerEmail;
-	
+
 	@Column(name = "MANDATE_ID", length = 100, nullable = false)
 	private String mandateId;
 
@@ -45,7 +45,7 @@ public class ENachTransactionDetails {
 
 	@Column(name = "MANDATE_START_DATE", length = 100, nullable = false)
 	private String mandateStartDate;
-	
+
 	@Column(name = "MANDATE_END_DATE", length = 100, nullable = false)
 	private String mandateEndDate;
 
@@ -81,7 +81,7 @@ public class ENachTransactionDetails {
 
 	@Column(name = "TRANSACTION_DATE", nullable = false)
 	private Timestamp transactionDate;
-	
+
 	@Column(name = "TRANSACTION_UPDATE_DATE", nullable = false)
 	private String transactionUpdateDate;
 
@@ -126,12 +126,15 @@ public class ENachTransactionDetails {
 
 	@Column(name = "ENACH_UMRN", nullable = false)
 	private String eNachUMRN;
-	
+
 	@Column(name = "CATEGORY_CODE", nullable = false)
-    private String categoryCode="NA";
-	
+	private String categoryCode = "NA";
+
 	@Column(name = "DEBIT_DATE", nullable = false)
-	private String debitDate="NA";
+	private String debitDate = "NA";
+
+	@Column(name = "MAX_AMOUNT", nullable = false)
+	private String maxAmount = "NA";
 
 	public Long geteNachTransactionId() {
 		return eNachTransactionId;
@@ -437,7 +440,6 @@ public class ENachTransactionDetails {
 		this.debitDate = debitDate;
 	}
 
-
 	@Override
 	public String toString() {
 		return "ENachTransactionDetails [eNachTransactionId=" + eNachTransactionId + ", requestId=" + requestId
@@ -459,6 +461,12 @@ public class ENachTransactionDetails {
 				+ ", debitDate=" + debitDate + "]";
 	}
 
-	
-	
+	public String getMaxAmount() {
+		return maxAmount;
+	}
+
+	public void setMaxAmount(String maxAmount) {
+		this.maxAmount = maxAmount;
+	}
+
 }

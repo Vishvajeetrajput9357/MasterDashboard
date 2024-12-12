@@ -52,8 +52,10 @@ public interface EnachTransactionDetailsRepository extends JpaRepository<ENachTr
 	);
 		
 	Optional<ENachTransactionDetails> findByMerchantTransactionRefId(String merchantTransactionRefId);
-	
-	
+
 	Optional<ENachTransactionDetails> findByMandateId(String mandateId);
 	
+	@Query(value = "SELECT * FROM enach_transaction_details WHERE merchant_transaction_ref_id=?1 AND merchant_id=?2", nativeQuery = true)
+	Optional<ENachTransactionDetails> findByMerchantTransactionRefIdAndMerchantId(String merchantTrxnRefId, long merchantId);
+
 }
