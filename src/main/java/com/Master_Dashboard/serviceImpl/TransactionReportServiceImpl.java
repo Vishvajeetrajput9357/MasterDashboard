@@ -131,6 +131,9 @@ public class TransactionReportServiceImpl implements TransactionReportService {
 			if (mandateRes.isPresent()) {
 
 				ENachTransactionDetails p = mandateRes.get();
+				
+				LOGGER.info("enachDeatilByMerchantTrxnId 8989:{} ", Encryption.decString(p.getCustomerMobileNumber()));
+
 				MandateResponse mandateResponse = new MandateResponse(p.getMaxAmount(),
 						Encryption.decString(p.getFrequency()), p.getMandateStartDate(), p.getMandateEndDate(),
 						Encryption.decString(p.getMandateType()), merchantTrxnRefId,

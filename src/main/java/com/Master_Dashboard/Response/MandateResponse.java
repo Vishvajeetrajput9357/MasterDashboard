@@ -38,6 +38,7 @@ public class MandateResponse {
 		this.bankName = bankName;
 		this.accountType = accountType;
 		this.transactionStatus = transactionStatus;
+		this.customerMobile=customerMobile;
 	}
 
 	public String getMaxAmount() {

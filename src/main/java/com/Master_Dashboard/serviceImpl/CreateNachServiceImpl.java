@@ -95,7 +95,7 @@ public class CreateNachServiceImpl implements CreateNachService {
 			map.put("url", "https://empirical-tootsie-kjsstpay-6c9fa64e.koyeb.app/dashboard/nachRedirect/createMandate/"+merchantTransactionRefId);
 //			map.put("url", "http://localhost:8090/dashboard/nachRedirect/createMandate/"+merchantTransactionRefId);
 			return map;
-
+			
 		} catch (Exception e) {	
 			return setErrorResponses.setErrorResponseWith(map, ResponseMessage.SOMETHING_WENT_WRONG, ResponseMessage.SOMETHING_WENT_WRONG_DESCRIPTION);
 		}
